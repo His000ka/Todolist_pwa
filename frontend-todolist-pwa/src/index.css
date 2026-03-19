@@ -102,32 +102,50 @@
   to { transform: translate(100px, 50px) rotate(30deg); }
 }
 
-
 body {
   margin: 0;
+  padding: 0;
   font-family: system-ui, -apple-system, sans-serif;
-  background: radial-gradient(circle at top left, #e0c3fc, #8ec5fc),
+  /* background: radial-gradient(circle at top left, #e0c3fc, #8ec5fc),
               linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   background-attachment: fixed;
   color: #0f172a;
-  min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
+  overflow: hidden;
+  min-height: 100vh;
+  height: 100%;
+  padding: 20px;   
 
-  
-  padding: 20px;
+  /* Empêche l'effet de rebond élastique qui montre le fond blanc de Safari */
+  overscroll-behavior: none;
 }
 
 .app-wrapper {
+  position: relative;
   min-height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--bg);
+  /* Ajoute un padding en haut égal à la taille de l'encoche */
+  padding-top: env(safe-area-inset-top);
+  /* Idem pour le bas pour la barre de balayage iOS */
+  padding-bottom: env(safe-area-inset-bottom);
+  box-sizing: border-box;
+}
+
+html, .app-wrapper {
+  background-color: var(--main-bg);
   transition: background 0.5s ease;
-  overflow: hidden;
+}
+
+.bg-animation {
+  position: absolute; /* Changé de fixed à absolute pour mieux coller au wrapper */
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .app-container {
