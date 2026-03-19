@@ -1,2 +1,2 @@
 # Todolist_pwa
-Objectif: déployer une application todolist en PWA sur mon iphon en moins de 24h.
+Objectif: Déployer une application todolist en PWA sur mon iphone en moins de 24h.
