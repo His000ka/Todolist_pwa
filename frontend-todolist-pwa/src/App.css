@@ -1,22 +1,90 @@
-h1 {
-  font-weight: 800;
-  letter-spacing: -1px;
-  margin-bottom: 24px;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+/* --- CONFIGURATION DES THEMES --- */
+.theme-sunset { --main-bg: #2d1b4e; --orbe-1: #ff5e62; --orbe-2: #ff9966; --accent: #ff5e62; }
+.theme-ocean { --main-bg: #1a2a6c; --orbe-1: #5edfff; --orbe-2: #3a1c71; --accent: #5edfff; }
+.theme-emerald { --main-bg: #064e3b; --orbe-1: #10b981; --orbe-2: #3b82f6; --accent: #10b981; }
+
+/* --- LE FIX ULTIME POUR LE FOND BLANC --- */
+html {
+  /* On lie la couleur de fond du navigateur à la variable du thème */
+  background-color: var(--main-bg); 
+  transition: background-color 0.5s ease;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  /* On utilise dvh pour que l'app s'adapte parfaitement avec le clavier iOS */
+  min-height: 100dvh; 
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--main-bg);
+  overscroll-behavior: none; /* Bloque le rebond blanc élastique */
+}
+
+/* --- LE WRAPPER --- */
+.app-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Aligné en haut pour laisser de la place au clavier */
+  padding: calc(env(safe-area-inset-top) + 20px) 20px env(safe-area-inset-bottom) 20px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* --- GLASSMORPHISM CONTAINER --- */
+.app-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.07); /* Plus subtil */
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  padding: 28px;
+  color: white;
+  /* Animation de l'agrandissement du container */
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* --- ANIMATION DES TACHES (AJOUT) --- */
+.task-item {
+  animation: taskPopIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  list-style: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 16px;
+  border-radius: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes taskPopIn {
+  0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* --- INPUT GROUP STYLÉ --- */
 .input-group {
   display: flex;
-  gap: 8px; /* Espace entre l'input et le bouton */
-  background: rgba(255, 255, 255, 0.1);
-  padding: 6px;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  margin-bottom: 24px;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 8px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 30px;
 }
 
 .input-group input {
-  flex: 1; /* L'input prend toute la place restante */
+  flex: 1;
   background: transparent;
   border: none;
   padding: 12px;
@@ -24,140 +92,65 @@ h1 {
   font-size: 16px;
   outline: none;
 }
+
 .btn-add {
   background: white;
   color: black;
   border: none;
-  padding: 0 20px;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s;
-  width: auto; /* Annule le width 100% précédent */
-}
-
-input {
-  width: 100%;
-  padding: 14px;
-
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  outline: none;
-
-  background: rgba(255, 255, 255, 0.2);
-  color: #0f172a;
-
-  font-size: 16px;
-  outline: none;
-  transition: 0.3;
-}
-
-input:focus {
-  background: rgba(255, 255, 255, 0.3);
-  box-shadow: white;
-}
-
-input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-button {
-  width: 100%;
-  padding: 14px;
+  padding: 0 22px;
   border-radius: 14px;
-  border: none;
+  font-weight: 700;
   cursor: pointer;
-  box-sizing: border-box;
-  background: white;
-  color: rgb(0, 0, 0);
-  font-weight: 600;
-
-  transition: transform 0.1s ease, opacity 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-button:hover {
-  transform: scale(1.02);
+.btn-add:active { transform: scale(0.95); opacity: 0.9; }
+
+/* --- BACKGROUND ANIMATION --- */
+.bg-animation {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
 }
 
-button:active {
-  transform: scale(0.98);
-  opacity: 0.8;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  background: rgba(255, 255, 255, 0.1);
-  margin-top: 12px;
-  padding: 16px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: transform 0.2s;
-}
-
-/* Effet au clic (très important sur mobile) */
-li:active {
-  transform: scale(0.98);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.done {
-  /* color: #00ff15; */
+.orbe {
+  position: absolute;
+  filter: blur(80px);
+  border-radius: 50%;
   opacity: 0.5;
+  animation: float 25s infinite alternate ease-in-out;
 }
 
-/* --- Task Items --- */
-.task-item {
-  list-style: none;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 14px;
-  border-radius: 14px;
+.orbe-1 { width: 300px; height: 300px; background: var(--orbe-1); top: -50px; left: -50px; }
+.orbe-2 { width: 400px; height: 400px; background: var(--orbe-2); bottom: -100px; right: -50px; }
+
+@keyframes float {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(60px, 100px) scale(1.1); }
+}
+
+/* --- THEME SELECTOR --- */
+.theme-selector {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  transition: 0.3s;
-}
-
-.task-text {
-  flex: 1;
-  cursor: pointer;
-  /* Empêche la sélection de texte gênante sur mobile */
-  user-select: none;
-  -webkit-user-select: none;
-  /* Évite le highlight gris dégeu au clic sur iOS */
-  -webkit-tap-highlight-color: transparent;
-}
-
-.btn-del {
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 8px;
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+  padding: 6px;
+  border-radius: 14px;
 }
 
-.btn-add, .btn-del, .theme-selector button {
-  -webkit-tap-highlight-color: transparent;
+.theme-selector button {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  padding: 6px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  width: auto;
+}
+
+.theme-selector button.active {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }

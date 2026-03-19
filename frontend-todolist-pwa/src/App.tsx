@@ -22,6 +22,12 @@ export default function App() {
     localStorage.setItem("todo_tasks", JSON.stringify(tasks));
   }, [tasks]);
 
+  useEffect(() => {
+    // On applique la classe du thème directement sur l'élément HTML
+    const currentThemeClass = themes[theme as keyof typeof themes].class;
+    document.documentElement.className = currentThemeClass;
+    }, [theme]);
+
   const addTask = () => {
     if (!input.trim()) return;
     
