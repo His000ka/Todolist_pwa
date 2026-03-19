@@ -1,38 +1,87 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #0f172a;
-  color: white;
-  margin: 0;
-}
-
-.container {
-  max-width: 500px;
-  margin: 60px auto;
-  padding: 20px;
-}
-
 h1 {
-  text-align: center;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 24px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.input-box {
+.input-group {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 8px; /* Espace entre l'input et le bouton */
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 24px;
+}
+
+.input-group input {
+  flex: 1; /* L'input prend toute la place restante */
+  background: transparent;
+  border: none;
+  padding: 12px;
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
+.btn-add {
+  background: white;
+  color: black;
+  border: none;
+  padding: 0 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+  width: auto; /* Annule le width 100% précédent */
 }
 
 input {
-  flex: 1;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
+  width: 100%;
+  padding: 14px;
+
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  outline: none;
+
+  background: rgba(255, 255, 255, 0.2);
+  color: #0f172a;
+
+  font-size: 16px;
+  outline: none;
+  transition: 0.3;
+}
+
+input:focus {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: white;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 button {
-  padding: 10px 12px;
-  border-radius: 8px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
   border: none;
   cursor: pointer;
+  box-sizing: border-box;
+  background: white;
+  color: rgb(0, 0, 0);
+  font-weight: 600;
+
+  transition: transform 0.1s ease, opacity 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.02);
+}
+
+button:active {
+  transform: scale(0.98);
+  opacity: 0.8;
 }
 
 ul {
@@ -41,10 +90,74 @@ ul {
 }
 
 li {
+  background: rgba(255, 255, 255, 0.1);
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s;
+}
+
+/* Effet au clic (très important sur mobile) */
+li:active {
+  transform: scale(0.98);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.done {
+  /* color: #00ff15; */
+  opacity: 0.5;
+}
+
+/* --- Task Items --- */
+.task-item {
+  list-style: none;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 14px;
+  border-radius: 14px;
   display: flex;
   justify-content: space-between;
-  background: #1e293b;
-  padding: 10px;
+  align-items: center;
   margin-bottom: 10px;
-  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.task-text {
+  flex: 1;
+  cursor: pointer;
+  /* Empêche la sélection de texte gênante sur mobile */
+  user-select: none;
+  -webkit-user-select: none;
+  /* Évite le highlight gris dégeu au clic sur iOS */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-del {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.btn-add, .btn-del, .theme-selector button {
+  -webkit-tap-highlight-color: transparent;
 }
