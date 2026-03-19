@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import "./App.css";
+import Input from "./components/Input";
 
 type Task = { id: string; text: string; done: boolean };
 
@@ -73,9 +74,10 @@ export default function App() {
             ))}
           </div>
         </header>
+        
 
         <div className="input-group">
-          <input
+          <Input
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}

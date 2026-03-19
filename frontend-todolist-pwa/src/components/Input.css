@@ -1,0 +1,58 @@
+/* .input-group {
+  display: flex;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 30px;
+}
+
+.input-group input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 12px;
+  color: white;
+  font-size: 16px;
+  outline: none;
+} */
+
+.custom-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 12px;
+  color: white;
+  font-size: 16px;
+  outline: none;
+  width: 100%;
+  
+  /* Désactive les styles par défaut de Safari Mobile */
+  /* -webkit-appearance: none; */
+}
+
+.custom-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* On stylise le conteneur dans App.css (ou ici) pour le glassmorphism */
+.input-group {
+  display: flex;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.1); /* Fond légèrement blanc transparent */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 8px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 30px;
+  transition: focus-within 0.3s ease;
+}
+
+/* Effet quand on clique sur l'input */
+.input-group:focus-within {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}

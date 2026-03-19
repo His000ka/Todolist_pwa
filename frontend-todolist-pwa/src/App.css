@@ -29,9 +29,11 @@ body {
   display: flex;
   justify-content: center;
   /* align-items: flex-start; Aligné en haut pour laisser de la place au clavier */
-  padding: calc(env(safe-area-inset-top) + 20px) 20px env(safe-area-inset-bottom) 20px;
+  padding: calc(env(safe-area-inset-top) + 60px) 20px calc(env(safe-area-inset-bottom) + 30px) 20px;
   box-sizing: border-box;
   overflow-x: hidden;
+
+  align-items: self-start; /* Aligné en haut pour laisser de la place au clavier */
 }
 
 /* .app-container {
@@ -85,27 +87,6 @@ body {
 @keyframes taskPopIn {
   0% { opacity: 0; transform: scale(0.8) translateY(20px); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-/* --- INPUT GROUP STYLÉ --- */
-.input-group {
-  display: flex;
-  gap: 10px;
-  background: rgba(0, 0, 0, 0.1);
-  padding: 8px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  margin-bottom: 30px;
-}
-
-.input-group input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  padding: 12px;
-  color: white;
-  font-size: 16px;
-  outline: none;
 }
 
 .btn-add {
