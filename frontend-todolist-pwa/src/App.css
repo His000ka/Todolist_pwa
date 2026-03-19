@@ -28,19 +28,18 @@ body {
   min-height: 100dvh;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Aligné en haut pour laisser de la place au clavier */
+  /* align-items: flex-start; Aligné en haut pour laisser de la place au clavier */
   padding: calc(env(safe-area-inset-top) + 20px) 20px env(safe-area-inset-bottom) 20px;
   box-sizing: border-box;
   overflow-x: hidden;
 }
 
-/* --- GLASSMORPHISM CONTAINER --- */
-.app-container {
+/* .app-container {
   position: relative;
   z-index: 2;
   width: 100%;
   max-width: 420px;
-  background: rgba(255, 255, 255, 0.07); /* Plus subtil */
+  background: rgba(255, 255, 255, 0.07);
   backdrop-filter: blur(25px) saturate(180%);
   -webkit-backdrop-filter: blur(25px) saturate(180%);
   border-radius: 32px;
@@ -48,24 +47,40 @@ body {
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
   padding: 28px;
   color: white;
-  /* Animation de l'agrandissement du container */
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-}
+} */
 
 /* --- ANIMATION DES TACHES (AJOUT) --- */
 .task-item {
   animation: taskPopIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   list-style: none;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 16px;
   border-radius: 18px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  padding: 14px;
+  margin-bottom: 10px;
+  transition: 0.3s;
 }
+
+.task-text {
+  flex: 1;
+  cursor: pointer;
+  /* Empêche la sélection de texte gênante sur mobile */
+  user-select: none;
+  -webkit-user-select: none;
+  /* Évite le highlight gris dégeu au clic sur iOS */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.task-item.done .task-text {
+  color: var(--accent);
+  filter: blur(1px); /* Effet "effacé" glassy */
+}
+
 
 @keyframes taskPopIn {
   0% { opacity: 0; transform: scale(0.8) translateY(20px); }
@@ -76,10 +91,10 @@ body {
 .input-group {
   display: flex;
   gap: 10px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.1);
   padding: 8px;
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   margin-bottom: 30px;
 }
 
