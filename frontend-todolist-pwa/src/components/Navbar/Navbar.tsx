@@ -15,12 +15,17 @@ export default function Navbar() {
         </NavLink>
 
         {/* Lien vers tes futures Stats (tu pourras le décommenter plus tard) */}
+        <NavLink
+            to="/premium"
+        >
+            <span className="nav-text">Todo</span>
+        </NavLink>
         <NavLink 
           to="/stats" 
         //   className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}
         >
           <span className="nav-text">Stats</span>
-        </NavLink> 
+        </NavLink>
        
       </div>
 
