@@ -1,8 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Input from "../components/Input/Input";
-import SelectField from "../components/Select/SelectField";
 
-type TaskType = "one" | "daily" | "weekly";
 
 type Task = {
   id: string;
