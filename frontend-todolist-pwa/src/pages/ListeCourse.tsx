@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Input from "../components/Input/Input";
+import "./ListeCourse.css"
 
 
 type Task = {
@@ -57,7 +58,7 @@ export default function ListeCourse() {
 
       <ul className="task-list">
         {tasks.map((task) => (
-          <li key={task.id} className={task.done ? "task-item done" : "task-item"}>
+          <li key={task.id} className={task.done ? "lc-task-item done" : "lc-task-item"}>
             <span className="task-text" onClick={() => toggleTask(task.id)}>
               {task.text.length > 20 ? task.text.substring(0, 20) + "..." : task.text}
             </span>

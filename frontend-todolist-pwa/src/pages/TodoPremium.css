@@ -1,0 +1,322 @@
+/* ---- Conteneur principal ---- */
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.task-form:focus-within {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ---- Input texte ---- */
+.task-form__input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 16px;
+  padding: 4px 0;
+}
+
+.task-form__input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ---- Séparateur ---- */
+.task-form__divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 0 -4px;
+}
+
+/* ---- Ligne label + contrôle ---- */
+.task-form__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.task-form__label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  white-space: nowrap;
+  min-width: 76px;
+}
+
+/* ---- Pills type de tâche ---- */
+.task-form__pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.task-form__pill {
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.task-form__pill--one.active {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.5);
+  color: rgba(196, 181, 253, 0.95);
+}
+
+.task-form__pill--daily.active {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: rgba(134, 239, 172, 0.95);
+}
+
+.task-form__pill--weekly.active {
+  background: rgba(251, 146, 60, 0.18);
+  border-color: rgba(251, 146, 60, 0.4);
+  color: rgba(253, 186, 116, 0.95);
+}
+
+/* ---- Slider ---- */
+.task-form__slider-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-form__slider-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-form__slider {
+  flex: 1;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.task-form__slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+}
+
+.task-form__slider--importance {
+  background: linear-gradient(
+    90deg,
+    rgba(139, 92, 246, 0.7) var(--slider-pct, 44%),
+    rgba(255, 255, 255, 0.1) var(--slider-pct, 44%)
+  );
+}
+
+.task-form__slider--difficulty {
+  background: linear-gradient(
+    90deg,
+    rgba(251, 146, 60, 0.7) var(--slider-pct, 22%),
+    rgba(255, 255, 255, 0.1) var(--slider-pct, 22%)
+  );
+}
+
+.task-form__slider-val {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  min-width: 18px;
+  text-align: right;
+}
+
+.task-form__slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+/* ---- Objectif hebdo ---- */
+.task-form__weekly {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.task-form__targets {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+}
+
+.task-form__target-btn {
+  flex: 1;
+  padding: 7px 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.task-form__target-btn.active {
+  background: rgba(251, 146, 60, 0.2);
+  border-color: rgba(251, 146, 60, 0.4);
+  color: rgba(253, 186, 116, 0.95);
+}
+
+.task-form__weekly-summary {
+  font-size: 12px;
+  color: rgba(253, 186, 116, 0.55);
+  text-align: right;
+}
+
+/* ---- Bouton submit ---- */
+.task-form__submit {
+  width: 100%;
+  padding: 13px;
+  border-radius: 14px;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1a1a2e;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 2px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.task-form__submit:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+/* ---- Task list ---- */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  /* Reset animation globale qui venait de index.css */
+  animation: none;
+  margin-bottom: 0;
+}
+
+.task-item:active {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.task-item.done {
+  opacity: 0.45;
+}
+
+/* ---- Pill type ---- */
+.task-card__type {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.task-card__type--one    { background: rgba(139,92,246,0.2);  color: rgba(196,181,253,0.9); }
+.task-card__type--daily  { background: rgba(34,197,94,0.18);  color: rgba(134,239,172,0.9); }
+.task-card__type--weekly { background: rgba(251,146,60,0.18); color: rgba(253,186,116,0.9); }
+
+/* ---- Texte ---- */
+.task-text {
+  flex: 1;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.task-item.done .task-text {
+  color: rgba(255, 255, 255, 0.3);
+  text-decoration: line-through;
+  filter: none; /* annule le blur de index.css */
+}
+
+/* ---- Dots importance ---- */
+.task-card__dots {
+  display: flex;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.task-card__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.task-card__dot.active.one    { background: rgba(196, 181, 253, 0.85); }
+.task-card__dot.active.daily  { background: rgba(134, 239, 172, 0.85); }
+.task-card__dot.active.weekly { background: rgba(253, 186, 116, 0.85); }
+
+/* ---- Progress hebdo inline ---- */
+.task-item__progress {
+  font-size: 11px;
+  color: rgba(253, 186, 116, 0.6);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ---- Empty state ---- */
+.empty-state {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 14px;
+  margin-top: 32px;
+}
