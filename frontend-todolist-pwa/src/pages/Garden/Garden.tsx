@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useGame } from "../../game/useGame";
-import { WEATHER_BACKGROUNDS, XP_PER_LEVEL } from "../../game/constants";
+import { XP_PER_LEVEL } from "../../game/constants";
 import PlantSVG from "./components/PlantSVG";
 import XPBar from "./components/XPBar";
 import type { Garden as GardenType } from "../../game/types";
@@ -46,7 +46,6 @@ function StarsOverlay() {
 
 export default function Garden() {
   const { garden, totalXP, addXP, setWeather } = useGame();
-  const bgRef = useRef<HTMLDivElement>(null);
 
   // Met à jour le fond selon la météo
     useEffect(() => {
@@ -69,11 +68,6 @@ export default function Garden() {
 
   return (
     <div className="garden-page">
-
-      {/* Fond météo */}
-      {/* <div ref={bgRef} className="garden-weather-bg" /> */}
-
-      {/* Overlay météo animé */}
 
       {/* Card principale */}
       <div className="garden-card">
