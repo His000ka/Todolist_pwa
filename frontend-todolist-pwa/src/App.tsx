@@ -3,7 +3,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import Navbar from "./components/Navbar/Navbar";
 import ListeCourse from "./pages/ListeCourse";
 import Stat from './pages/StatPage';
-import TodoPremium from './pages/TodoPremium';
+// import TodoPremium from './pages/TodoPremium';
 import Garden from './pages/Garden/Garden';
 
 export default function App() {
@@ -21,7 +21,7 @@ export default function App() {
                 <Routes>
                 <Route path="/todo" element={<ListeCourse />} />
                 <Route path="/stats" element={<Stat />} />
-                <Route path='/premium' element={<TodoPremium/>} />
+                {/* <Route path='/premium' element={<TodoPremium/>} /> */}
                 <Route path="/garden" element={<Garden />} />
                 <Route path="/" element={<ListeCourse />} />
                 </Routes>
