@@ -49,11 +49,20 @@ export default function Garden() {
   const bgRef = useRef<HTMLDivElement>(null);
 
   // Met à jour le fond selon la météo
-  useEffect(() => {
-    if (bgRef.current) {
-      bgRef.current.style.background = WEATHER_BACKGROUNDS[garden.weather];
-    }
-  }, [garden.weather]);
+    useEffect(() => {
+        // Au lieu de changer un fond local, on pousse la couleur météo
+        // dans la variable globale que bg-animation utilise déjà
+        const overlays: Record<string, string> = {
+            sunny:  "rgba(255, 200, 80,  0.06)",
+            rain:   "rgba(80,  120, 255, 0.08)",
+            night:  "rgba(80,  40,  160, 0.12)",
+            golden: "rgba(255, 160, 40,  0.10)",
+        };
+        document.documentElement.style.setProperty(
+            "--weather-overlay",
+            overlays[garden.weather]
+        );
+    }, [garden.weather]);
 
   // Stats factices pour le streak — sera branché sur usePremiumTasks en Phase 3
   const streak = 7;
@@ -62,15 +71,15 @@ export default function Garden() {
     <div className="garden-page">
 
       {/* Fond météo */}
-      <div ref={bgRef} className="garden-weather-bg" />
+      {/* <div ref={bgRef} className="garden-weather-bg" /> */}
 
       {/* Overlay météo animé */}
-      {garden.weather === "rain"  && <RainOverlay />}
-      {garden.weather === "night" && <StarsOverlay />}
 
       {/* Card principale */}
       <div className="garden-card">
 
+        {garden.weather === "rain"  && <RainOverlay />}
+        {garden.weather === "night" && <StarsOverlay />}
         {/* Header */}
         <div className="garden-header">
           <div>

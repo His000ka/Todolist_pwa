@@ -3,7 +3,6 @@ import { ThemeProvider } from "./context/ThemeContext";
 import Navbar from "./components/Navbar/Navbar";
 import ListeCourse from "./pages/ListeCourse";
 import Stat from './pages/StatPage';
-import "./App.css";
 import TodoPremium from './pages/TodoPremium';
 import Garden from './pages/Garden/Garden';
 
