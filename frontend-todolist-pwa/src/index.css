@@ -17,10 +17,11 @@
 
 /* ---- Reset iOS ---- */
 html {
-  height: -webkit-fill-available;
+  height: 100%;
   background-color: var(--main-bg);
   transition: background-color 0.5s ease;
   overscroll-behavior: none;
+  /* -webkit-fill-available supprimé — conflit avec height: 100% */
 }
 
 body {
