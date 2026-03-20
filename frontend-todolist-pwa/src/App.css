@@ -21,35 +21,6 @@ body {
   overscroll-behavior: none; /* Bloque le rebond blanc élastique */
 }
 
-/* --- LE WRAPPER --- */
-.app-wrapper {
-  position: relative;
-  width: 100%;
-  min-height: 100dvh;
-  display: flex;
-  justify-content: center;
-  /* align-items: flex-start; Aligné en haut pour laisser de la place au clavier */
-  padding: calc(env(safe-area-inset-top) + 60px) 20px calc(env(safe-area-inset-bottom) + 30px) 20px;
-  box-sizing: border-box;
-  overflow-x: hidden;
-
-  align-items: self-start; /* Aligné en haut pour laisser de la place au clavier */
-}
-
-/* .app-container {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 420px;
-  background: rgba(255, 255, 255, 0.07);
-  backdrop-filter: blur(25px) saturate(180%);
-  -webkit-backdrop-filter: blur(25px) saturate(180%);
-  border-radius: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-  padding: 28px;
-  color: white;
-} */
 
 /* --- ANIMATION DES TACHES (AJOUT) --- */
 .task-item {

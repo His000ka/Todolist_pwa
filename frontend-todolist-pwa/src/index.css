@@ -103,7 +103,7 @@
 }
 
 /* 1. Reset total pour éviter les débordements */
-html, body {
+html, body, #root {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -124,17 +124,19 @@ body {
   position: relative;
   width: 100%;
   height: 100dvh;
+  min-height: -webkit-fill-available;
+
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   
   /* On utilise box-sizing pour que le padding ne fasse pas grossir l'élément */
   box-sizing: border-box; 
   
   /* Safe Area pour iPhone 14 + marge de respiration */
-  padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom) 20px;
+  padding: calc(env(safe-area-inset-top) + 60px) 20px calc(env(safe-area-inset-bottom) + 30px) 20px;
   
-  background: var(--main-bg);
+  /* background: var(--main-bg); */
   transition: background 0.5s ease;
 }
 
