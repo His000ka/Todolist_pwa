@@ -1,136 +1,46 @@
-/* ---- Variables globales ---- */
 :root {
-  --glass-bg:     rgba(255, 255, 255, 0.15);
+  --glass-bg: rgba(255, 255, 255, 0.15);
   --glass-border: rgba(255, 255, 255, 0.3);
   --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-  --text-color:   #1e293b;
+  --text-color: #1e293b;
   --accent-color: #6366f1;
-  --blur-component: 20px;
-  --weather-overlay: rgba(255, 200, 80, 0.06); /* sunny par défaut */
+
+  --blur-component: 20px
+  --weather-overlay: rgba(255, 200, 80, 0.06)
 }
 
-/* ---- Thèmes ---- */
-.theme-sunset  { --main-bg: #2d1b4e; --orbe-1-color: #ff5e62; --orbe-2-color: #ff9966; --accent: #ff5e62; }
-.theme-ocean   { --main-bg: #1a2a6c; --orbe-1-color: #5edfff; --orbe-2-color: #b21f1f; --accent: #5edfff; }
-.theme-emerald { --main-bg: #064e3b; --orbe-1-color: #10b981; --orbe-2-color: #3b82f6; --accent: #10b981; }
-.theme-night   { --main-bg: #171d1b; --orbe-1-color: #0d1412; --orbe-2-color: #747474; --accent: #cccccc4f; }
 
-
-html {
-  height: 100%;
-  background-color: var(--main-bg);
-  transition: background-color 0.5s ease;
-  overscroll-behavior: none;
+/* Thème Sunset par défaut */
+.theme-sunset {
+  --main-bg: #2d1b4e;
+  --orbe-1-color: #ff5e62;
+  --orbe-2-color: #ff9966;
+  --accent: #ff5e62;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  overscroll-behavior: none;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: var(--main-bg);
-  /* PLUS de position: fixed ici */
+/* Thème Ocean */
+.theme-ocean {
+  --main-bg: #1a2a6c;
+  --orbe-1-color: #5edfff;
+  --orbe-2-color: #b21f1f; /* mélange violet/rouge profond */
+  --accent: #5edfff;
 }
 
-#root {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  background: var(--main-bg);
-  animation: fadeIn 0.15s ease-out;
-  /* PLUS de position: fixed ici non plus */
+/* Thème Emerald */
+.theme-emerald {
+  --main-bg: #064e3b;
+  --orbe-1-color: #10b981;
+  --orbe-2-color: #3b82f6;
+  --accent: #10b981;
 }
 
-/* ---- Background animé — UNE SEULE définition ---- */
-.bg-animation {
-  position: fixed;   /* fixed, pas absolute — couvre toute la fenêtre safe area incluse */
-  inset: 0;
-  z-index: -1;
-  overflow: hidden;
-  pointer-events: none;
-  background: var(--main-bg);
-  transition: background 0.5s ease;
+.theme-night {
+  --main-bg: #171d1b;
+  --orbe-1-color: #0d1412;
+  --orbe-2-color: #747474;
+  --accent: #cccccc4f;
 }
 
-/* Overlay météo par-dessus le thème — couvre tout l'écran sans conflit */
-.bg-animation::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--weather-overlay);
-  transition: background 0.8s ease;
-  pointer-events: none;
-}
-
-.orbe {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.5;
-  animation: float 20s infinite alternate ease-in-out;
-}
-
-.orbe-1 {
-  width: 400px;
-  height: 400px;
-  background: var(--orbe-1-color);
-  top: 10%;
-  left: 10%;
-}
-
-.orbe-2 {
-  width: 350px;
-  height: 350px;
-  background: var(--orbe-2-color);
-  bottom: 10%;
-  right: 5%;
-  animation-delay: -5s;
-}
-
-/* ---- Layout principal ---- */
-.app-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  padding-top: env(safe-area-inset-top);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-  /* pas de padding-bottom ici — géré par app-container */
-}
-
-.app-container {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
-  box-sizing: border-box;
-  padding: 24px 20px calc(80px + env(safe-area-inset-bottom)) 20px;
-  color: white;
-}
-
-/* ---- Animations ---- */
-@keyframes float {
-  from { transform: translate(0, 0)     rotate(0deg);  }
-  to   { transform: translate(100px, 50px) rotate(30deg); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* ---- Theme selector ---- */
 .app-header {
   display: flex;
   justify-content: space-between;
@@ -157,5 +67,124 @@ body {
 
 .theme-selector button.active {
   background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Conteneur pour les formes animées */
+.bg-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--main-bg); /* Variable selon le thème */
+}
+
+.bg-animation::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--weather-overlay);
+  transition: background 0.8s ease;
+  pointer-events: none;
+}
+
+.orbe {
+  position: absolute;
+  /* filter: blur(1px); */
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: float 20s infinite alternate ease-in-out;
+}
+
+.orbe-1 {
+  width: 400px;
+  height: 400px;
+  background: var(--orbe-1-color);
+  top: 10%;
+  left: 10%;
+}
+
+.orbe-2 {
+  width: 350px;
+  height: 350px;
+  background: var(--orbe-2-color);
+  bottom: 10%;
+  right: 5%;
+  animation-delay: -5s;
+}
+
+@keyframes float {
+  from { transform: translate(0, 0) rotate(0deg); }
+  to { transform: translate(100px, 50px) rotate(30deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: var(--main-bg);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  overscroll-behavior: none;
+  min-height: 100dvh;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.bg-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.app-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  /* Safe areas iOS */
+  padding-top: env(safe-area-inset-top);
+  /* padding-bottom: env(safe-area-inset-bottom); */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+.app-container {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 24px 20px calc(60px + env(safe-area-inset-bottom)) 20px;
+  color: white;
 }
