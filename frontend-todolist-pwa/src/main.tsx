@@ -4,11 +4,12 @@ import './index.css'
 import App from './App.tsx'
 
 function fixViewport() {
-  document.documentElement.style.height = window.innerHeight + "px";
-  document.body.style.height = window.innerHeight + "px";
+  requestAnimationFrame(() => {
+    document.documentElement.style.height = `${window.innerHeight}px`;
+    document.body.style.height = `${window.innerHeight}px`;
+  });
 }
 
-// au load
 window.addEventListener("load", fixViewport);
 window.addEventListener("resize", fixViewport);
 window.addEventListener("orientationchange", fixViewport);

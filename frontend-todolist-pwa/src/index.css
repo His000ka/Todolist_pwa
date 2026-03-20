@@ -104,14 +104,27 @@
   to { transform: translate(100px, 50px) rotate(30deg); }
 }
 
-/* 1. Reset total pour éviter les débordements */
-html, body, #root {
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  /* overflow: hidden; Bloque le scroll parasite */
-  background-color: var(--main-bg); /* Couleur de secours */
+  background: var(--main-bg);
+  overscroll-behavior: none;
+}
+
+#root {
+  min-height: 100dvh;
+  background: var(--main-bg);
+  background-color: var(--main-bg);
+
+  opacity: 1;
+  animation: fadeIn 0.15s ease-out;
 }
 
 body {
@@ -135,11 +148,13 @@ body {
   /* On utilise box-sizing pour que le padding ne fasse pas grossir l'élément */
   box-sizing: border-box;
   
-  /* Safe Area pour iPhone 14 + marge de respiration */
   padding: calc(env(safe-area-inset-top) + 60px) 20px calc(env(safe-area-inset-bottom) + 30px) 20px;
   
   /* background: var(--main-bg); */
   transition: background 0.5s ease;
+  background-color: var(--main-bg);
+  /* overflow: hidden; */
+
 }
 
 /* 3. L'animation de fond : BIEN fixée en arrière-plan */
