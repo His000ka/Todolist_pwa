@@ -26,6 +26,11 @@ export default function Navbar() {
         >
           <span className="nav-text">Stats</span>
         </NavLink>
+        <NavLink
+            to="/garden"
+        >
+            <span className="nav-text">Gaden</span>
+        </NavLink>
        
       </div>
 

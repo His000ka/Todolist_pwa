@@ -1,0 +1,27 @@
+@keyframes plant-sway {
+  0%, 100% { transform: rotate(-1.5deg); }
+  50%       { transform: rotate(1.5deg);  }
+}
+@keyframes plant-sway-slow {
+  0%, 100% { transform: rotate(-2deg); }
+  50%       { transform: rotate(2deg);  }
+}
+@keyframes plant-float {
+  0%   { transform: translateY(0);    opacity: 0.8; }
+  100% { transform: translateY(-40px); opacity: 0;  }
+}
+
+.plant-sway      { transform-origin: 50% 95%; animation: plant-sway 3.5s ease-in-out infinite; }
+.plant-sway-slow { transform-origin: 50% 95%; animation: plant-sway-slow 2.8s ease-in-out infinite; }
+
+.plant-particle  { animation: plant-float 2.2s ease-out infinite; }
+.p2 { animation-delay: 0.7s;  }
+.p3 { animation-delay: 1.4s;  }
+
+.plant-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 180px;
+  transition: all 0.5s ease;
+}

@@ -33,6 +33,13 @@
   --accent: #10b981;
 }
 
+.theme-night {
+  --main-bg: #171d1b;
+  --orbe-1-color: #0d1412;
+  --orbe-2-color: #747474;
+  --accent: #cccccc4f;
+}
+
 .app-header {
   display: flex;
   justify-content: space-between;
@@ -152,7 +159,7 @@ body {
 
   /* Safe areas iOS */
   padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
+  /* padding-bottom: env(safe-area-inset-bottom); */
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
 }
@@ -168,6 +175,6 @@ body {
   max-width: 400px;
   margin: 0 auto;
   box-sizing: border-box;
-  padding: 24px 24px 24px 24px;
+  padding: 24px 20px calc(60px + env(safe-area-inset-bottom)) 20px;
   color: white;
 }

@@ -2,13 +2,13 @@
   position: fixed;
   bottom: 0;
   left: 0;
-  width: 100%;
+  right: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   
   /* Padding adaptatif pour l'iPhone */
-  padding: 12px 20px calc(12px + env(safe-area-inset-bottom)) 20px;
+  padding: 10px 20px calc(5px + env(safe-area-inset-bottom)) 20px;
   
   /* Effet Glassmorphism */
   background: rgba(255, 255, 255, 0.05);
@@ -42,8 +42,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-decoration: none;
-  color: rgba(255, 255, 255, 0.5); /* Couleur inactive */
   gap: 4px;
   transition: all 0.3s ease;
 }

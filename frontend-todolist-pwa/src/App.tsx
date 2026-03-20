@@ -5,6 +5,7 @@ import ListeCourse from "./pages/ListeCourse";
 import Stat from './pages/StatPage';
 import "./App.css";
 import TodoPremium from './pages/TodoPremium';
+import Garden from './pages/Garden/Garden';
 
 export default function App() {
   return (
@@ -15,23 +16,20 @@ export default function App() {
         <div className="orbe orbe-2"></div>
       </div>
 
-
-        <div className="app-wrapper">
-            
-            <Navbar />
-        <div className="app-container">
-            
+      <div className="app-wrapper">
+        <div className="app-container"> 
             <main>
                 <Routes>
                 <Route path="/todo" element={<ListeCourse />} />
                 <Route path="/stats" element={<Stat />} />
                 <Route path='/premium' element={<TodoPremium/>} />
-                
+                <Route path="/garden" element={<Garden />} />
                 <Route path="/" element={<ListeCourse />} />
                 </Routes>
             </main>
         </div>
-        </div>
+        <Navbar />
+      </div>
       </Router>
     </ThemeProvider>
   );
