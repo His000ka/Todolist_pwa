@@ -74,7 +74,7 @@ body {
 .btn-add:active { transform: scale(0.95); opacity: 0.9; }
 
 /* --- BACKGROUND ANIMATION --- */
-.bg-animation {
+/* .bg-animation {
   position: fixed;
   inset: 0;
   z-index: 1;
@@ -87,37 +87,9 @@ body {
   border-radius: 50%;
   opacity: 0.5;
   animation: float 25s infinite alternate ease-in-out;
-}
-
-.orbe-1 { width: 300px; height: 300px; background: var(--orbe-1); top: -50px; left: -50px; }
-.orbe-2 { width: 400px; height: 400px; background: var(--orbe-2); bottom: -100px; right: -50px; }
+} */
 
 @keyframes float {
   from { transform: translate(0, 0) scale(1); }
   to { transform: translate(60px, 100px) scale(1.1); }
-}
-
-/* --- THEME SELECTOR --- */
-.theme-selector {
-  display: flex;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 6px;
-  border-radius: 14px;
-}
-
-.theme-selector button {
-  background: transparent;
-  border: none;
-  font-size: 18px;
-  padding: 6px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-  width: auto;
-}
-
-.theme-selector button.active {
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
