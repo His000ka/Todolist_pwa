@@ -15,36 +15,35 @@
 .theme-emerald { --main-bg: #064e3b; --orbe-1-color: #10b981; --orbe-2-color: #3b82f6; --accent: #10b981; }
 .theme-night   { --main-bg: #171d1b; --orbe-1-color: #0d1412; --orbe-2-color: #747474; --accent: #cccccc4f; }
 
-/* ---- Reset iOS ---- */
+
 html {
-  height: -webkit-fill-available;
+  height: 100%;
   background-color: var(--main-bg);
   transition: background-color 0.5s ease;
   overscroll-behavior: none;
-  /* -webkit-fill-available supprimé — conflit avec height: 100% */
 }
 
 body {
   margin: 0;
   padding: 0;
   width: 100%;
-  /* Fix scroll iOS — position fixed bloque l'élasticité Safari */
-  position: fixed;
-  inset: 0;
+  height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: var(--main-bg);
+  /* PLUS de position: fixed ici */
 }
 
 #root {
-  position: fixed;
-  inset: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   background: var(--main-bg);
   animation: fadeIn 0.15s ease-out;
+  /* PLUS de position: fixed ici non plus */
 }
 
 /* ---- Background animé — UNE SEULE définition ---- */
