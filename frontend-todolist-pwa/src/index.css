@@ -17,7 +17,7 @@
 
 /* ---- Reset iOS ---- */
 html {
-  height: 100%;
+  height: -webkit-fill-available;
   background-color: var(--main-bg);
   transition: background-color 0.5s ease;
   overscroll-behavior: none;

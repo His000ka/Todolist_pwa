@@ -28,7 +28,7 @@ export default function App() {
             </main>
         </div>
       </div>
-        <Navbar />
+      <Navbar />
       </Router>
     </ThemeProvider>
   );
