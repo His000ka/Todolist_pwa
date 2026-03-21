@@ -29,7 +29,7 @@ export type TaskPremium = {
   description: string;
 };
 
-const TARGET_OPTIONS = [1, 2, 3,4, 5,6, 7];
+const TARGET_OPTIONS = [1,2,3,4,5,6,7];
 
 // Met à jour le dégradé CSS du slider via une custom property
 function updateSliderBg(el: HTMLInputElement) {

@@ -2,8 +2,8 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 export const themes = {
   sunset: { name: "🌅", class: "theme-sunset", color: "#2d1b4e" },
-//   ocean: { name: "🌊", class: "theme-ocean", color: "#1a2a6c" },
-//   emerald: { name: "🍃", class: "theme-emerald", color: "#064e3b" },
+  ocean: { name: "🌊", class: "theme-ocean", color: "#1a2a6c" },
+  emerald: { name: "🍃", class: "theme-emerald", color: "#064e3b" },
   night: { name: "🌘", class: "theme-night", color: "#064e3b" },
 };
 

@@ -31,6 +31,10 @@ export default function Navbar() {
         >
             <span className="nav-text">Gaden</span>
         </NavLink>
+
+        <NavLink to="/profile">
+            <span className="nav-text">Profil</span>
+        </NavLink>
        
       </div>
 
