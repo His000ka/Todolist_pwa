@@ -1,5 +1,5 @@
 import { useAuth } from "../../context/AuthContext";
-import { supabase } from "../../lib/supabase";
+// import { supabase } from "../../lib/supabase";
 import "./ProfilePage.css";
 
 function getInitials(email: string) {
