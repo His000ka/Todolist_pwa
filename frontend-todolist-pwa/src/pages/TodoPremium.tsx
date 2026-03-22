@@ -43,7 +43,7 @@ export default function TodoPremium() {
 //     return stored ? JSON.parse(stored) : [];
 //   });
 
-  const { tasks, addTask, toggleTask, deleteTask, editDesc, syncing } = usePremiumTasks()
+  const { tasks, addTask, toggleTask, deleteTask, editDesc } = usePremiumTasks()
 
   const [input,      setInput]      = useState("");
   const [taskType,   setTaskType]   = useState<TaskType>("one");

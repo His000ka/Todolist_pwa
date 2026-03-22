@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import ThemeSelector from "../Theme/ThemeSelector";
+// import ThemeSelector from "../Theme/ThemeSelector";
 import "./Navbar.css";
 
 export default function Navbar() {
