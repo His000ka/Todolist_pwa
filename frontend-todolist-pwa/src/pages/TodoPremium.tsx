@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import Input from "../components/Input/Input";
-import "./TodoPremium.css";
-
+import { usePremiumTasks } from '../hooks/usePremiumTasks'
 import TaskSheet from "../components/TaskSheet/TaskSheet";
+import "./TodoPremium.css";
 
 
 
@@ -38,10 +38,12 @@ function updateSliderBg(el: HTMLInputElement) {
 }
 
 export default function TodoPremium() {
-  const [tasks, setTasks] = useState<TaskPremium[]>(() => {
-    const stored = localStorage.getItem("tasks_premium");
-    return stored ? JSON.parse(stored) : [];
-  });
+//   const [tasks, setTasks] = useState<TaskPremium[]>(() => {
+//     const stored = localStorage.getItem("tasks_premium");
+//     return stored ? JSON.parse(stored) : [];
+//   });
+
+  const { tasks, addTask, toggleTask, deleteTask, editDesc, syncing } = usePremiumTasks()
 
   const [input,      setInput]      = useState("");
   const [taskType,   setTaskType]   = useState<TaskType>("one");
@@ -56,12 +58,12 @@ export default function TodoPremium() {
   const impSliderRef = useRef<HTMLInputElement>(null);
   const difSliderRef = useRef<HTMLInputElement>(null);
 
-  const editDesc = (id: string, desc: string) =>
-    setTasks(tasks.map(t => t.id === id ? { ...t, description: desc } : t));
+//   const editDesc = (id: string, desc: string) =>
+//     setTasks(tasks.map(t => t.id === id ? { ...t, description: desc } : t));
 
-  useEffect(() => {
-    localStorage.setItem("tasks_premium", JSON.stringify(tasks));
-  }, [tasks]);
+//   useEffect(() => {
+//     localStorage.setItem("tasks_premium", JSON.stringify(tasks));
+//   }, [tasks]);
 
   // Init des dégradés sliders au montage
   useEffect(() => {
@@ -69,34 +71,57 @@ export default function TodoPremium() {
     if (difSliderRef.current) updateSliderBg(difSliderRef.current);
   }, []);
 
-  const createTask = (): TaskPremium => {
+//   const createTask = (): TaskPremium => {
+//     const base: TaskPremium = {
+//       id:         crypto.randomUUID(),
+//       text:       input,
+//       type:       taskType,
+//       createdAt:  Date.now(),
+//       done:       false,
+//       weight:     importance,
+//       difficulty,
+//       description: "",
+//     };
+//     if (taskType === "daily")  return { ...base, streak: 0, lastCompleted: null };
+//     if (taskType === "weekly") return { ...base, target, progress: 0 };
+//     return base;
+//   };
+
+//   const addTask = () => {
+//     if (!input.trim()) return;
+//     setTasks(prev => [...prev, createTask()]);
+//     setInput("");
+//     inputRef.current?.focus();
+//   };
+
+//   const toggleTask = (id: string) =>
+//     setTasks(tasks.map(t => t.id === id ? { ...t, done: !t.done } : t));
+
+//   const deleteTask = (id: string) =>
+//     setTasks(tasks.filter(t => t.id !== id));
+
+  const handleAddTask = () => {
+    if (!input.trim()) return
     const base: TaskPremium = {
-      id:         crypto.randomUUID(),
-      text:       input,
-      type:       taskType,
-      createdAt:  Date.now(),
-      done:       false,
-      weight:     importance,
+      id:          crypto.randomUUID(),
+      text:        input,
+      type:        taskType,
+      createdAt:   Date.now(),
+      done:        false,
+      weight:      importance,
       difficulty,
-      description: "",
-    };
-    if (taskType === "daily")  return { ...base, streak: 0, lastCompleted: null };
-    if (taskType === "weekly") return { ...base, target, progress: 0 };
-    return base;
-  };
+      description: '',
+    }
+    const task = taskType === 'daily'
+      ? { ...base, streak: 0, lastCompleted: null }
+      : taskType === 'weekly'
+      ? { ...base, target, progress: 0 }
+      : base
 
-  const addTask = () => {
-    if (!input.trim()) return;
-    setTasks(prev => [...prev, createTask()]);
-    setInput("");
-    inputRef.current?.focus();
-  };
-
-  const toggleTask = (id: string) =>
-    setTasks(tasks.map(t => t.id === id ? { ...t, done: !t.done } : t));
-
-  const deleteTask = (id: string) =>
-    setTasks(tasks.filter(t => t.id !== id));
+    addTask(task)
+    setInput('')
+    inputRef.current?.focus()
+  }
 
   const handleImpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setImportance(Number(e.target.value));
@@ -118,7 +143,7 @@ export default function TodoPremium() {
           ref={inputRef}
           value={input}
           onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === "Enter" && addTask()}
+          onKeyDown={e => e.key === "Enter" && handleAddTask()}
           placeholder="Nouvelle tâche..."
           className="task-form__input"
         />
@@ -209,7 +234,7 @@ export default function TodoPremium() {
           </>
         )}
 
-        <button className="task-form__submit" onClick={addTask}>
+        <button className="task-form__submit" onClick={handleAddTask}>
           Ajouter la tâche
         </button>
       </div>

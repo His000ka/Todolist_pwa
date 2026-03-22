@@ -1,3 +1,4 @@
+import ThemeSelector from "../../components/Theme/ThemeSelector";
 import { useAuth } from "../../context/AuthContext";
 // import { supabase } from "../../lib/supabase";
 import "./ProfilePage.css";
@@ -63,6 +64,11 @@ export default function ProfilePage() {
       <div className="profile-badge profile-badge--connected">
         <span className="profile-dot profile-dot--green" />
         Connecté
+      </div>
+
+      <div className="profile-card">
+        <p className="profile-card-title">Thèmes</p>
+        <ThemeSelector></ThemeSelector>
       </div>
 
       {/* Card compte */}

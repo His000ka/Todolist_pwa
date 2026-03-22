@@ -1,21 +1,36 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 import './AuthPage.css'
 
-export default function AuthPage() {
-  const [email,    setEmail]    = useState('')
-  const [password, setPassword] = useState('')
-  const [isSignUp, setIsSignUp] = useState(false)
-  const [error,    setError]    = useState<string | null>(null)
-  const [loading,  setLoading]  = useState(false)
 
-  const handleEmail = async () => {
-    setLoading(true)
+
+export default function AuthPage() {
+    const [email,    setEmail]    = useState('')
+    const [password, setPassword] = useState('')
+    const [isSignUp, setIsSignUp] = useState(false)
+    const [error,    setError]    = useState<string | null>(null)
+    const [loading,  setLoading]  = useState(false)
+    
+    const navigate = useNavigate()
+    const { user } = useAuth()
+    
+    useEffect(() => {
+        if (user) navigate('/profile')
+    }, [user, navigate])
+
+    const handleEmail = async () => {
+        setLoading(true)
     setError(null)
     const { error } = isSignUp
       ? await supabase.auth.signUp({ email, password })
       : await supabase.auth.signInWithPassword({ email, password })
-    if (error) setError(error.message)
+    if (error) {
+        setError(error.message)
+    } else {
+        navigate('/profile')
+    }
     setLoading(false)
   }
 

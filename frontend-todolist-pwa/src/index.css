@@ -13,7 +13,7 @@
 /* Thème Sunset par défaut */
 .theme-sunset {
   --main-bg: #2d1b4e;
-  --sheet-bg: #5f4197;
+  --sheet-bg: #5f4197d2;
   --orbe-1-color: #ff5e62;
   --orbe-2-color: #ff9966;
   --accent: #ff5e62;
@@ -22,8 +22,8 @@
 /* Thème Ocean */
 .theme-ocean {
   --main-bg: #1a2a6c;
-  --sheet-bg: #2d1b4e;
-  --orbe-1-color: #5edfff;
+  --sheet-bg: #2f709bc0;
+  --orbe-1-color: #194223d2;
   --orbe-2-color: #b21f1f; /* mélange violet/rouge profond */
   --accent: #5edfff;
 }
@@ -31,7 +31,7 @@
 /* Thème Emerald */
 .theme-emerald {
   --main-bg: #064e3b;
-  --sheet-bg: #2d1b4e;
+  --sheet-bg: #368588cb;
   --orbe-1-color: #10b981;
   --orbe-2-color: #3b82f6;
   --accent: #10b981;
@@ -39,7 +39,7 @@
 
 .theme-night {
   --main-bg: #171d1b;
-  --sheet-bg: #2d1b4e;
+  --sheet-bg: #4e5050b4;
   --orbe-1-color: #0d1412;
   --orbe-2-color: #747474;
   --accent: #cccccc4f;

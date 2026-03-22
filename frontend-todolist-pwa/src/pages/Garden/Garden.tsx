@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { useGame } from "../../game/useGame";
+// import { useGame } from "../../game/useGame";
+import { useGarden } from '../../hooks/useGarden'
 import { XP_PER_LEVEL } from "../../game/constants";
 import PlantSVG from "./components/PlantSVG";
 import XPBar from "./components/XPBar";
@@ -45,7 +46,7 @@ function StarsOverlay() {
 }
 
 export default function Garden() {
-  const { garden, totalXP, addXP, setWeather } = useGame();
+  const { garden, totalXP, addXP, setWeather } = useGarden()
 
   // Met à jour le fond selon la météo
     useEffect(() => {
