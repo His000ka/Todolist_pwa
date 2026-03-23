@@ -37,6 +37,80 @@
   margin: 0;
 }
 
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-edit-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.profile-username-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  align-items: center;
+}
+
+.profile-username-input {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 10px 14px;
+  color: white;
+  font-size: 16px;
+  outline: none;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.profile-username-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.profile-btn-sm {
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.profile-btn-sm--save {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  color: #1a1a2e;
+  font-weight: 600;
+}
+
+.profile-btn-sm--cancel {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.profile-save-msg {
+  font-size: 12px;
+  color: rgba(134, 239, 172, 0.8);
+  margin: 0;
+}
+
+.profile-save-msg.error {
+  color: rgba(252, 165, 165, 0.8);
+}
+
 .profile-name--guest { color: rgba(255, 255, 255, 0.45); }
 
 .profile-email {

@@ -1,8 +1,10 @@
 import { NavLink } from "react-router-dom";
+import { useFriends } from "../../hooks/useFriends";
 // import ThemeSelector from "../Theme/ThemeSelector";
 import "./Navbar.css";
 
 export default function Navbar() {
+  const { pendingReceived } = useFriends()
   return (
     <nav className="bottom-navbar">
       <div className="nav-links">
@@ -24,6 +26,13 @@ export default function Navbar() {
 
         <NavLink to="/profile">
             <span className="nav-text">Profil</span>
+        </NavLink>
+
+        <NavLink to="/friends" style={{ position: 'relative' }}>
+          <span className="nav-text">Amis</span>
+          {pendingReceived.length > 0 && (
+            <span className="nav-badge">{pendingReceived.length}</span>
+          )}
         </NavLink>
        
       </div>

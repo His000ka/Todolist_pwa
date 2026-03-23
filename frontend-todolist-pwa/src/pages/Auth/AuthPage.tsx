@@ -12,6 +12,7 @@ export default function AuthPage() {
     const [isSignUp, setIsSignUp] = useState(false)
     const [error,    setError]    = useState<string | null>(null)
     const [loading,  setLoading]  = useState(false)
+    const [username, setUsername] = useState('')
     
     const navigate = useNavigate()
     const { user } = useAuth()
@@ -22,17 +23,27 @@ export default function AuthPage() {
 
     const handleEmail = async () => {
         setLoading(true)
-    setError(null)
-    const { error } = isSignUp
-      ? await supabase.auth.signUp({ email, password })
-      : await supabase.auth.signInWithPassword({ email, password })
-    if (error) {
-        setError(error.message)
-    } else {
-        navigate('/profile')
+        setError(null)
+
+        if (isSignUp) {
+            const { data, error } = await supabase.auth.signUp({ email, password })
+            if (error) { setError(error.message); setLoading(false); return }
+
+            if (data.user) {
+            await supabase.from('profiles').upsert({
+                id:       data.user.id,
+                email:    email,
+                username: username.trim() || null,
+            })
+            }
+            navigate('/profile')
+        } else {
+            const { error } = await supabase.auth.signInWithPassword({ email, password })
+            if (error) setError(error.message)
+            else navigate('/profile')
+        }
+        setLoading(false)
     }
-    setLoading(false)
-  }
 
   const handleGoogle = async () => {
     await supabase.auth.signInWithOAuth({
@@ -55,6 +66,16 @@ export default function AuthPage() {
           value={email}
           onChange={e => setEmail(e.target.value)}
         />
+        {isSignUp && (
+            <input
+                className="auth-input"
+                type="text"
+                placeholder="Nom d'utilisateur"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                maxLength={20}
+            />
+        )}
         <input
           className="auth-input"
           type="password"

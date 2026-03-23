@@ -8,15 +8,10 @@ import Garden from './pages/Garden/Garden';
 import { AuthProvider } from './context/AuthContext';
 import AuthPage from './pages/Auth/AuthPage';
 import ProfilePage from './pages/Profile/ProfilePage';
-// import { useAuth } from './context/AuthContext'
+import FriendsPage from './pages/Friends/FriendsPage'
+import FriendProfilePage from './pages/Friends/FriendProfilePage';
 
 export default function App() {
-    // const { user, loading } = useAuth()
-
-    // if (loading) return null
-    // if (!user) return <AuthPage />
-
-
   return (
     <ThemeProvider>
       <AuthProvider>
@@ -36,7 +31,9 @@ export default function App() {
                 <Route path='/premium' element={<TodoPremium/>} />
                 <Route path="/garden" element={<Garden />} />
                 <Route path="/auth" element={<AuthPage />} />
+                <Route path="/friends" element={<FriendsPage />} />
                 <Route path="/" element={<ListeCourse />} />
+                <Route path="/friends/:id" element={<FriendProfilePage />} />
                 </Routes>
             </main>
         </div>
