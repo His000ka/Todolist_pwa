@@ -1,21 +1,23 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import type { TaskPremium } from "../../pages/TodoPremium";
+import { isTaskLocked, getCompleteButtonLabel } from '../../utils/taskUtils'
 import "./TaskSheet.css";
 
 type Props = {
   task: TaskPremium | null;
   onClose:    () => void;
-  onToggle:   (id: string) => void;
+  onComplete:   (id: string) => void;
   onDelete:   (id: string) => void;
   onDescEdit: (id: string, desc: string) => void;
+  onToggleNotif: (id: string) => void
 };
 
 export const TYPE_LABELS: Record<string, string> = {
   one: "unique", daily: "quotidien", weekly: "hebdo",
 };
 
-export default function TaskSheet({ task, onClose, onToggle, onDelete, onDescEdit }: Props) {
+export default function TaskSheet({ task, onClose, onComplete, onDelete, onDescEdit, onToggleNotif }: Props) {
 
   // Ferme avec Escape
   useEffect(() => {
@@ -108,12 +110,33 @@ export default function TaskSheet({ task, onClose, onToggle, onDelete, onDescEdi
                 )}
               </div>
 
+              <div className="task-sheet__notif-row">
+                <span className="task-sheet__meta-label">Notifications</span>
+                <button
+                    className={`task-sheet__notif-btn ${task.notificationsEnabled ? 'active' : ''}`}
+                    onClick={() => onToggleNotif(task.id)}
+                >
+                    {task.notificationsEnabled ? 'Activées' : 'Désactivées'}
+                </button>
+              </div>
+
               <div className="task-sheet__actions">
                 <button
-                  className={`task-sheet__btn-done ${task.done ? "done" : ""}`}
-                  onClick={() => { onToggle(task.id); onClose(); }}
+                  className={`task-sheet__btn-done ${isTaskLocked(task) ? "locked" : ""} ${task.done ? "done" : ""}`}
+                  onClick={() => {
+                    if (isTaskLocked(task) && task.type !== 'one') return
+                    onComplete(task.id)
+                    onClose() // ferme toujours — la tâche one disparaît, le sheet aussi
+                  }}
+                  disabled={isTaskLocked(task) && task.type !== 'one'}
                 >
-                  {task.done ? "✓ Fait" : "✓ Marquer fait"}
+                    {getCompleteButtonLabel(task)}
+                  {/* {task.type === 'daily' && task.done
+                    ? '✓ Fait aujourd\'hui'
+                    : task.type === 'weekly'
+                    ? `✓ Valider (${task.progress ?? 0}/${task.target}×)`
+                    : task.done ? '✓ Fait' : '✓ Marquer fait'
+                  } */}
                 </button>
                 <button
                   className="task-sheet__btn-del"

@@ -206,6 +206,31 @@
 .task-sheet__meta-val         { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.8); }
 .task-sheet__meta-val--streak { color: rgba(253, 186, 116, 0.9); }
 
+
+/* -- NOTIF -- */
+.task-sheet__notif-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-sheet__notif-btn {
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.task-sheet__notif-btn.active {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: rgba(134, 239, 172, 0.9);
+}
+
 /* ---- Actions ---- */
 .task-sheet__actions {
   display: flex;
@@ -232,6 +257,17 @@
   background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.35);
+}
+
+.task-sheet__btn-done.locked {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.25);
+  cursor: not-allowed;
+}
+
+.task-sheet__btn-done.locked:active {
+  transform: none; /* pas d'effet au clic */
 }
 
 .task-sheet__btn-del {

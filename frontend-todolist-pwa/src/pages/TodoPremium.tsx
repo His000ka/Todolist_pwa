@@ -2,6 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import Input from "../components/Input/Input";
 import { usePremiumTasks } from '../hooks/usePremiumTasks'
 import TaskSheet from "../components/TaskSheet/TaskSheet";
+import { useGarden } from "../hooks/useGarden";
+// import { calculateXP, getTodayKey, isTaskLocked } from '../utils/taskUtils'
+import { useNotifications } from '../hooks/useNotifications'
 import "./TodoPremium.css";
 
 
@@ -27,6 +30,7 @@ export type TaskPremium = {
   weight: number;
   difficulty: number;
   description: string;
+  notificationsEnabled: boolean;
 };
 
 const TARGET_OPTIONS = [1,2,3,4,5,6,7];
@@ -38,12 +42,11 @@ function updateSliderBg(el: HTMLInputElement) {
 }
 
 export default function TodoPremium() {
-//   const [tasks, setTasks] = useState<TaskPremium[]>(() => {
-//     const stored = localStorage.getItem("tasks_premium");
-//     return stored ? JSON.parse(stored) : [];
-//   });
+    const { addXP } = useGarden()
 
-  const { tasks, addTask, toggleTask, deleteTask, editDesc } = usePremiumTasks()
+  const { tasks, addTask, completeTask, deleteTask, editDesc, toggleNotif } = usePremiumTasks(addXP)
+
+  const { requestPermission } = useNotifications(tasks)
 
   const [input,      setInput]      = useState("");
   const [taskType,   setTaskType]   = useState<TaskType>("one");
@@ -58,47 +61,15 @@ export default function TodoPremium() {
   const impSliderRef = useRef<HTMLInputElement>(null);
   const difSliderRef = useRef<HTMLInputElement>(null);
 
-//   const editDesc = (id: string, desc: string) =>
-//     setTasks(tasks.map(t => t.id === id ? { ...t, description: desc } : t));
-
-//   useEffect(() => {
-//     localStorage.setItem("tasks_premium", JSON.stringify(tasks));
-//   }, [tasks]);
-
   // Init des dégradés sliders au montage
   useEffect(() => {
     if (impSliderRef.current) updateSliderBg(impSliderRef.current);
     if (difSliderRef.current) updateSliderBg(difSliderRef.current);
   }, []);
 
-//   const createTask = (): TaskPremium => {
-//     const base: TaskPremium = {
-//       id:         crypto.randomUUID(),
-//       text:       input,
-//       type:       taskType,
-//       createdAt:  Date.now(),
-//       done:       false,
-//       weight:     importance,
-//       difficulty,
-//       description: "",
-//     };
-//     if (taskType === "daily")  return { ...base, streak: 0, lastCompleted: null };
-//     if (taskType === "weekly") return { ...base, target, progress: 0 };
-//     return base;
-//   };
-
-//   const addTask = () => {
-//     if (!input.trim()) return;
-//     setTasks(prev => [...prev, createTask()]);
-//     setInput("");
-//     inputRef.current?.focus();
-//   };
-
-//   const toggleTask = (id: string) =>
-//     setTasks(tasks.map(t => t.id === id ? { ...t, done: !t.done } : t));
-
-//   const deleteTask = (id: string) =>
-//     setTasks(tasks.filter(t => t.id !== id));
+  useEffect(() => {
+    requestPermission()
+  }, [requestPermission])
 
   const handleAddTask = () => {
     if (!input.trim()) return
@@ -111,6 +82,7 @@ export default function TodoPremium() {
       weight:      importance,
       difficulty,
       description: '',
+      notificationsEnabled: true,
     }
     const task = taskType === 'daily'
       ? { ...base, streak: 0, lastCompleted: null }
@@ -278,9 +250,10 @@ export default function TodoPremium() {
     <TaskSheet
       task={selectedTask}
       onClose={() => setSelectedTaskId(null)}
-      onToggle={toggleTask}
+      onComplete={completeTask}
       onDelete={deleteTask}
       onDescEdit={editDesc}
+      onToggleNotif={toggleNotif}
     />
 
       {tasks.length === 0 && (
