@@ -90,7 +90,7 @@ export default function ListeCourse() {
   const { user }    = useAuth()
   const {
     lists, activeList, activeListId, loading,
-    setActiveListId, createList, deleteList, renameList,
+    setActiveListId, createList, deleteList,
     addMember, removeMember,
     addTask, toggleTask, deleteTask,
   } = useTaskLists()
