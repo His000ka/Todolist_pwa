@@ -116,7 +116,7 @@ export function usePremiumTasks(addXP?: (amount: number, streakBonus?: boolean) 
         ]
         return
     }
-    await supabase.from('tasks_premium').upsert(toSupabase(task, user.id))
+    await supabase.from('tasks_premium').upsert(toSupabase(task, user.id), { onConflict: 'id' })
 }, [user])
 
 // Quand retour online → vide la queue

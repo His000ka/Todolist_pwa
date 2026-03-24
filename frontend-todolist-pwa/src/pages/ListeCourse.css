@@ -1,4 +1,4 @@
-/* ---- Tasks (depuis App.css, centralisées ici) ---- */
+/* ---- Tasks (depuis App.css, centralisées ici) ----
 .lc-task-item {
   animation: taskPopIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   list-style: none;
@@ -46,4 +46,344 @@
 @keyframes taskPopIn {
   0%   { opacity: 0; transform: scale(0.8) translateY(20px); }
   100% { opacity: 1; transform: scale(1)   translateY(0);    }
+} */
+
+
+.lc-page {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ---- Sélecteur de listes ---- */
+.lc-lists-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lc-lists-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  flex: 1;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 2px;
+}
+
+.lc-lists-scroll::-webkit-scrollbar { display: none; }
+
+.lc-list-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lc-list-pill.active {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.lc-new-list-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---- Nouvelle liste form ---- */
+.lc-new-list-form {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lc-emoji-picker {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.lc-emoji-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lc-emoji-btn.active {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.lc-new-list-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.lc-new-list-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 10px 14px;
+  color: white;
+  font-size: 15px;
+  outline: none;
+}
+
+.lc-new-list-input::placeholder { color: rgba(255, 255, 255, 0.3); }
+
+.lc-new-list-confirm {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1a1a2e;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lc-new-list-cancel {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* ---- Header liste ---- */
+.lc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lc-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.lc-header-emoji { font-size: 20px; flex-shrink: 0; }
+
+.lc-header-name {
+  font-size: 17px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lc-header-count {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.3);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.lc-header-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.lc-icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---- Options ---- */
+.lc-options {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 8px;
+}
+
+.lc-option-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.lc-option-btn--danger {
+  color: rgba(252, 165, 165, 0.8);
+}
+
+.lc-option-btn--danger:active {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* ---- Partage ---- */
+.lc-share-panel {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lc-share-title {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin: 0;
+}
+
+.lc-member-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lc-member-name {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.lc-member-remove {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.08);
+  color: rgba(252, 165, 165, 0.7);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.lc-member-add {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  background: rgba(139, 92, 246, 0.12);
+  color: rgba(196, 181, 253, 0.8);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* ---- Tâches ---- */
+.lc-task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lc-task-item.done { opacity: 0.45; }
+.lc-task-item.done .task-text {
+  text-decoration: line-through;
+  color: rgba(255, 255, 255, 0.4);
+  filter: none;
+}
+
+.lc-task-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: rgba(134, 239, 172, 0.9);
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.lc-task-check.checked {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.lc-task-delete {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---- Empty states ---- */
+.lc-empty {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 14px;
+  margin: 16px 0;
+}
+
+.lc-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 32px;
 }
