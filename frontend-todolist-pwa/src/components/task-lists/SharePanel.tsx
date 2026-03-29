@@ -1,9 +1,4 @@
-type Member = {
-  id: string
-  userId: string
-  username?: string | null
-  role: "owner" | "member" | string
-}
+import type { TaskListMember } from "../../types/taskList"
 
 type Friend = {
   id: string
@@ -14,7 +9,7 @@ type Friend = {
 }
 
 type Props = {
-  members: Member[]
+  members: TaskListMember[]
   friendsNotInList: Friend[]
   listId: string
   isOwner: boolean
