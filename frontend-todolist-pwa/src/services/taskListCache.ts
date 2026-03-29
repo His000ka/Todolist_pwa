@@ -2,7 +2,7 @@ import type { SimpleTaskList } from '../types/taskList'
 
 const CACHE_KEY = 'SimpleTaskLists_cache'
 
-export const SimpleTaskListCache = {
+export const taskListCache = {
   get(): SimpleTaskList[] {
     try {
       const raw = localStorage.getItem(CACHE_KEY)
