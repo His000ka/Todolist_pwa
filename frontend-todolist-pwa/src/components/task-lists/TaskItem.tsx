@@ -1,11 +1,7 @@
-type Task = {
-  id: string
-  text: string
-  done: boolean
-}
+import type { SimpleTask } from "../../types/taskList"
 
 type Props = {
-  task: Task
+  task: SimpleTask
   onToggle: (id: string, done: boolean) => void
   onDelete: (id: string) => void
 }

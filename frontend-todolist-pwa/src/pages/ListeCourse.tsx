@@ -1,82 +1,3 @@
-// import { useEffect, useState, useRef } from "react";
-// import Input from "../components/Input/Input";
-// import "./ListeCourse.css"
-
-
-// type Task = {
-//   id: string;
-//   text: string;
-//   createdAt: number;
-//   done: boolean;
-// };
-
-// export default function ListeCourse() {
-//   const [tasks, setTasks] = useState<Task[]>(() => {
-//     const stored = localStorage.getItem("todo_tasks");
-//     return stored ? JSON.parse(stored) : [];
-//   });
-//   const [input, setInput] = useState("");
-//   const inputRef = useRef<HTMLInputElement>(null);
-
-//   useEffect(() => {
-//     localStorage.setItem("todo_tasks", JSON.stringify(tasks));
-//   }, [tasks]);
-
-//   const addTask = () => {
-//     if (!input.trim()) return;
-//     const newTask = createTask();
-//     setTasks((prev) => [...prev, newTask]);
-//     setInput("");
-//     inputRef.current?.focus();
-//   };
-
-//   const createTask = (): Task => {
-//     const base = { id: crypto.randomUUID(), text: input, createdAt: Date.now(), done: false };
-//     return base;
-//   };
-
-//   const toggleTask = (id: string) => {
-//     setTasks(tasks.map(t => t.id === id ? { ...t, done: !t.done } : t));
-//   };
-
-//   const deleteTask = (id: string) => {
-//     setTasks(tasks.filter(t => t.id !== id));
-//   };
-
-//   return (
-//     <div className="list-course-content"> 
-//       <div className="input-group">
-//         <Input
-//           ref={inputRef}
-//           value={input}
-//           onChange={(e) => setInput(e.target.value)}
-//           onKeyDown={(e) => e.key === "Enter" && addTask()}
-//           placeholder="Nouvelle tâche..."
-//         />
-//         <button className="btn-add" onClick={addTask}>Ajouter</button>
-//       </div>
-
-//       <ul className="task-list">
-//         {tasks.map((task) => (
-//           <li key={task.id} className={task.done ? "lc-task-item done" : "lc-task-item"}>
-//             <span className="task-text" onClick={() => toggleTask(task.id)}>
-//               {task.text.length > 20 ? task.text.substring(0, 20) + "..." : task.text}
-//             </span>
-//             <button className="btn-del" onClick={() => task.done && deleteTask(task.id)}>
-//               {task.done ? "🗑️" : "🔒"}
-//             </button>
-//           </li>
-//         ))}
-//       </ul>
-
-//       {tasks.length === 0 && (
-//         <p className="empty-state">💤 Aucune tâche pour le moment</p>
-//       )}
-//     </div>
-//   );
-// }
-
-
 import { useState, useRef } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useTaskLists } from '../hooks/useTaskLists'
@@ -90,24 +11,14 @@ import SharePanel from "../components/task-lists/SharePanel"
 import CreateList from "../components/task-lists/CreateList"
 
 import './ListeCourse.css'
+import type { SimpleTask, TaskListMember } from '../types/taskList'
 
-type Task = {
-  id: string
-  text: string
-  done: boolean
-}
 
-type Member = {
-  id: string
-  userId: string
-  username?: string | null
-  role: "owner" | "member" | string
-}
 
 export default function ListeCourse() {
   const { user }    = useAuth()
   const {
-    lists, activeList, activeListId, loading,
+    lists, activeList, activeListId, loading, isOnline,
     setActiveListId, createList, deleteList,
     addMember, removeMember,
     addTask, toggleTask, deleteTask,
@@ -141,7 +52,7 @@ export default function ListeCourse() {
 
   // Amis pas encore membres de la liste active
   const friendsNotInList = friends.filter(f =>
-    !activeList?.members.some((m: Member) => m.userId === f.profile?.id)
+    !activeList?.members.some((m: TaskListMember) => m.userId === f.profile?.id)
   )
 
   return (
@@ -210,7 +121,7 @@ export default function ListeCourse() {
             onKeyDown={e => e.key === 'Enter' && handleAddTask()}
             placeholder="Nouvelle tâche..."
           />
-          <button className="btn-add" onClick={handleAddTask}>Ajouter</button>
+          <button className="btn-add" onClick={handleAddTask} disabled={!isOnline} title={!isOnline ? 'Hors ligne' : ''}>Ajouter</button>
         </div>
       )}
 
@@ -225,7 +136,7 @@ export default function ListeCourse() {
 
       {activeList && (
         <ul className="task-list" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-          {activeList.tasks.map((task: Task) => (
+          {activeList.tasks.map((task: SimpleTask) => (
             <TaskItem
                 key={task.id}
                 task={task}

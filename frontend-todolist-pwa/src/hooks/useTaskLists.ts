@@ -1,27 +1,33 @@
-import { useState, useEffect, useCallback } from "react"
-import { useAuth } from "../context/AuthContext"
-import { taskListService } from "../services/taskListService"
-import { mapTaskLists } from "../mappers/taskListMapper"
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { useAuth } from '../context/AuthContext'
+import { useOnlineStatus } from './useOnlineStatus'
+import { taskListService } from '../services/taskListService'
+import { taskListCache } from '../services/taskListCache'
+import { mapTaskLists } from '../mappers/taskListMapper'
+import type { SimpleTaskList } from '../types/taskList'
 
 export function useTaskLists() {
-  const { user } = useAuth()
+  const { user }    = useAuth()
+  const isOnline    = useOnlineStatus()
+  const prevOnline  = useRef(isOnline)
 
-  const [lists, setLists] = useState<any[]>([])
+  const [lists,        setLists]        = useState<SimpleTaskList[]>(taskListCache.get)
   const [activeListId, setActiveListId] = useState<string | undefined>()
-  const [loading, setLoading] = useState(false)
+  const [loading,      setLoading]      = useState(false)
 
-  const activeList =
-    lists.find((l) => l.id === activeListId) ?? null
+  const activeList = lists.find(l => l.id === activeListId) ?? null
 
-  const loadLists = useCallback(async () => {
-    if (!user) return
+  // ── Fetch Supabase → cache → state ──────────────────────────────
+  const syncFromSupabase = useCallback(async () => {
+    if (!user || !isOnline) return
     setLoading(true)
 
     const { data: listsData } = await taskListService.fetchLists()
+    const listIds = listsData?.map(l => l.id) ?? []
 
-    const listIds = listsData?.map((l) => l.id) ?? []
     if (!listIds.length) {
       setLists([])
+      taskListCache.set([])
       setLoading(false)
       return
     }
@@ -31,89 +37,127 @@ export function useTaskLists() {
       taskListService.fetchTasks(listIds),
     ])
 
-    const memberUserIds =
-      membersRes.data?.map((m) => m.user_id) ?? []
-
-    const profilesRes =
-      await taskListService.fetchProfiles(memberUserIds)
+    const memberUserIds = membersRes.data?.map(m => m.user_id) ?? []
+    const profilesRes   = await taskListService.fetchProfiles(memberUserIds)
 
     const mapped = mapTaskLists(
-      listsData ?? [],
-      membersRes.data ?? [],
-      profilesRes.data ?? [],
-      tasksRes.data ?? []
+      listsData          ?? [],
+      membersRes.data    ?? [],
+      profilesRes.data   ?? [],
+      tasksRes.data      ?? [],
     )
 
     setLists(mapped)
+    taskListCache.set(mapped)   // ← miroir local
     setLoading(false)
-  }, [user])
+  }, [user, isOnline])
 
+  // ── Boot : localStorage immédiat, puis sync si online ───────────
   useEffect(() => {
-    if (!user) return
-    loadLists()
+    const cached = taskListCache.get()
+    if (cached.length) setLists(cached)   // affichage immédiat
+    if (user) syncFromSupabase()
   }, [user])
 
-  // ---- mutations ----
-  const createList = async (name: string, emoji: string) => {
-    if (!user) return false
+  // ── Reconnexion → resync ─────────────────────────────────────────
+  useEffect(() => {
+    if (!prevOnline.current && isOnline && user) {
+      syncFromSupabase()
+    }
+    prevOnline.current = isOnline
+  }, [isOnline, user])
 
-    const { data } = await taskListService.createList({
-      owner_id: user.id,
-      name,
-      emoji,
+  // ── Helpers mutations (online only) ─────────────────────────────
+  const guardOnline = () => {
+    if (!isOnline) {
+      alert('Pas de connexion — modifications impossibles hors ligne.')
+      return false
+    }
+    return true
+  }
+
+  // Optimistic update : modifie le state local, puis resync
+  const withOptimistic = async (
+    optimisticFn: (prev: SimpleTaskList[]) => SimpleTaskList[],
+    remoteFn: () => PromiseLike<unknown>,
+  ) => {
+    setLists(prev => {
+      const next = optimisticFn(prev)
+      taskListCache.set(next)
+      return next
     })
+    await remoteFn()
+    await syncFromSupabase()  // resync pour cohérence
+  }
 
+  // ── Mutations ────────────────────────────────────────────────────
+  const createList = async (name: string, emoji: string) => {
+    if (!guardOnline() || !user) return false
+    const { data } = await taskListService.createList({ owner_id: user.id, name, emoji })
     if (!data) return false
-
+    await syncFromSupabase()
     setActiveListId(data.id)
-    loadLists()
     return true
   }
 
   const deleteList = async (listId: string) => {
-    await taskListService.deleteList(listId)
+    if (!guardOnline()) return
+    await withOptimistic(
+      prev => prev.filter(l => l.id !== listId),
+      ()   => taskListService.deleteList(listId),
+    )
     setActiveListId(undefined)
-    loadLists()
-  }
-
-  const addMember = async (listId: string, friendId: string) => {
-    await taskListService.addMember(listId, friendId)
-    loadLists()
-  }
-
-  const removeMember = async (listId: string, userId: string) => {
-    await taskListService.removeMember(listId, userId)
-    loadLists()
   }
 
   const addTask = async (listId: string, text: string) => {
-    if (!user) return
-    await taskListService.addTask(listId, user.id, text)
-    loadLists()
+    if (!guardOnline() || !user) return
+    // Optimistic : ajoute la tâche localement avec un id temporaire
+    const tempId = `temp-${Date.now()}`
+    await withOptimistic(
+      prev => prev.map(l => l.id !== listId ? l : {
+        ...l,
+        tasks: [...l.tasks, { id: tempId, listId, createdBy: user.id, text, done: false, createdAt: new Date().toISOString() }],
+      }),
+      () => taskListService.addTask(listId, user.id, text),
+    )
   }
 
   const toggleTask = async (taskId: string, done: boolean) => {
-    await taskListService.toggleTask(taskId, done)
-    loadLists()
+    if (!guardOnline()) return
+    await withOptimistic(
+      prev => prev.map(l => ({
+        ...l,
+        tasks: l.tasks.map(t => t.id === taskId ? { ...t, done: !done } : t),
+      })),
+      () => taskListService.toggleTask(taskId, done),
+    )
   }
 
   const deleteTask = async (taskId: string) => {
-    await taskListService.deleteTask(taskId)
-    loadLists()
+    if (!guardOnline()) return
+    await withOptimistic(
+      prev => prev.map(l => ({ ...l, tasks: l.tasks.filter(t => t.id !== taskId) })),
+      () => taskListService.deleteTask(taskId),
+    )
+  }
+
+  const addMember = async (listId: string, friendId: string) => {
+    if (!guardOnline()) return
+    await taskListService.addMember(listId, friendId)
+    await syncFromSupabase()
+  }
+
+  const removeMember = async (listId: string, userId: string) => {
+    if (!guardOnline()) return
+    await taskListService.removeMember(listId, userId)
+    await syncFromSupabase()
   }
 
   return {
-    lists,
-    activeList,
-    activeListId,
-    loading,
+    lists, activeList, activeListId, loading, isOnline,
     setActiveListId,
-    createList,
-    deleteList,
-    addMember,
-    removeMember,
-    addTask,
-    toggleTask,
-    deleteTask,
+    createList, deleteList,
+    addMember, removeMember,
+    addTask, toggleTask, deleteTask,
   }
 }

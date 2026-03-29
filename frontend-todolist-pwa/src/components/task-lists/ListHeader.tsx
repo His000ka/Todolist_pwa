@@ -1,20 +1,7 @@
-type Member = {
-  id: string
-  username?: string
-  role: string
-}
-
-type List = {
-  id: string
-  name: string
-  emoji: string
-  tasks: { done: boolean }[]
-  ownerId: string
-  members: Member[]
-}
+import type { SimpleTaskList } from "../../types/taskList"
 
 type Props = {
-  list: List 
+  list: SimpleTaskList 
   isOwner: boolean
   onToggleShare: () => void
   onToggleOptions: () => void
