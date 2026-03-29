@@ -1,9 +1,9 @@
-import type { TaskList } from '../types/taskList'
+import type { SimpleTaskList } from '../types/taskList'
 
-const CACHE_KEY = 'tasklists_cache'
+const CACHE_KEY = 'SimpleTaskLists_cache'
 
-export const taskListCache = {
-  get(): TaskList[] {
+export const SimpleTaskListCache = {
+  get(): SimpleTaskList[] {
     try {
       const raw = localStorage.getItem(CACHE_KEY)
       return raw ? JSON.parse(raw) : []
@@ -12,7 +12,7 @@ export const taskListCache = {
     }
   },
 
-  set(lists: TaskList[]): void {
+  set(lists: SimpleTaskList[]): void {
     localStorage.setItem(CACHE_KEY, JSON.stringify(lists))
   },
 
