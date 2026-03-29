@@ -82,9 +82,27 @@ import { useAuth } from '../context/AuthContext'
 import { useTaskLists } from '../hooks/useTaskLists'
 import { useFriends } from '../hooks/useFriends'
 import Input from '../components/Input/Input'
+
+import ListHeader from '../components/task-lists/ListHeader'
+import ListSelector from '../components/task-lists/ListSelector'
+import TaskItem from "../components/task-lists/TaskItem"
+import SharePanel from "../components/task-lists/SharePanel"
+import CreateList from "../components/task-lists/CreateList"
+
 import './ListeCourse.css'
 
-const LIST_EMOJIS = ['📋','🛒','🏠','📚','💼','🎯','🏋️','🌱','✈️','🎮']
+type Task = {
+  id: string
+  text: string
+  done: boolean
+}
+
+type Member = {
+  id: string
+  userId: string
+  username?: string | null
+  role: "owner" | "member" | string
+}
 
 export default function ListeCourse() {
   const { user }    = useAuth()
@@ -98,8 +116,6 @@ export default function ListeCourse() {
 
   const [input,        setInput]        = useState('')
   const [showNewList,  setShowNewList]  = useState(false)
-  const [newListName,  setNewListName]  = useState('')
-  const [newListEmoji, setNewListEmoji] = useState('📋')
   const [showShare,    setShowShare]    = useState(false)
   const [showOptions,  setShowOptions]  = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -111,11 +127,8 @@ export default function ListeCourse() {
     inputRef.current?.focus()
   }
 
-  const handleCreateList = async () => {
-    if (!newListName.trim()) return
-    await createList(newListName.trim(), newListEmoji)
-    setNewListName('')
-    setNewListEmoji('📋')
+  const handleCreateList = async (name: string, emoji: string) => {
+    await createList(name, emoji)
     setShowNewList(false)
   }
 
@@ -128,91 +141,39 @@ export default function ListeCourse() {
 
   // Amis pas encore membres de la liste active
   const friendsNotInList = friends.filter(f =>
-    !activeList?.members.some(m => m.userId === f.profile?.id)
+    !activeList?.members.some((m: Member) => m.userId === f.profile?.id)
   )
 
   return (
     <div className="lc-page">
 
       {/* ---- Sélecteur de listes ---- */}
-      <div className="lc-lists-row">
-        <div className="lc-lists-scroll">
-          {lists.map(l => (
-            <button
-              key={l.id}
-              className={`lc-list-pill ${l.id === activeListId ? 'active' : ''}`}
-              onClick={() => setActiveListId(l.id)}
-            >
-              <span>{l.emoji}</span>
-              <span>{l.name}</span>
-            </button>
-          ))}
-        </div>
-        <button
-          className="lc-new-list-btn"
-          onClick={() => setShowNewList(true)}
-        >+</button>
-      </div>
+      <ListSelector
+        lists={lists}
+        activeListId={activeListId}
+        onSelect={setActiveListId}
+        onCreateClick={() => setShowNewList(true)}
+      />
 
       {/* ---- Créer une liste ---- */}
       {showNewList && (
-        <div className="lc-new-list-form">
-          <div className="lc-emoji-picker">
-            {LIST_EMOJIS.map(e => (
-              <button
-                key={e}
-                className={`lc-emoji-btn ${e === newListEmoji ? 'active' : ''}`}
-                onClick={() => setNewListEmoji(e)}
-              >{e}</button>
-            ))}
-          </div>
-          <div className="lc-new-list-input-row">
-            <input
-              className="lc-new-list-input"
-              placeholder="Nom de la liste..."
-              value={newListName}
-              onChange={e => setNewListName(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleCreateList()}
-              autoFocus
-            />
-            <button className="lc-new-list-confirm" onClick={handleCreateList}>
-              Créer
-            </button>
-            <button className="lc-new-list-cancel" onClick={() => setShowNewList(false)}>
-              ✕
-            </button>
-          </div>
-        </div>
+        <CreateList
+            onCreate={handleCreateList}
+            onClose={() => setShowNewList(false)}
+        />
       )}
 
       {/* ---- Header liste active ---- */}
       {activeList && (
-        <div className="lc-header">
-          <div className="lc-header-left">
-            <span className="lc-header-emoji">{activeList.emoji}</span>
-            <h2 className="lc-header-name">{activeList.name}</h2>
-            <span className="lc-header-count">
-              {activeList.tasks.filter(t => !t.done).length} restantes
-            </span>
-          </div>
-          <div className="lc-header-actions">
-            {isOwner && (
-              <button
-                className="lc-icon-btn"
-                onClick={() => setShowShare(s => !s)}
-              >👥</button>
-            )}
-            {isOwner && (
-              <button
-                className="lc-icon-btn"
-                onClick={() => setShowOptions(s => !s)}
-              >⋯</button>
-            )}
-          </div>
-        </div>
+        <ListHeader
+          list={activeList}
+          isOwner={isOwner}
+          onToggleShare={() => setShowShare((s) => !s)}
+          onToggleOptions={() => setShowOptions((s) => !s)}
+        />
       )}
 
-      {/* ---- Options liste ---- */}
+      {/* ---- Options liste - les '...' pour suprimer la liste ---- */}
       {showOptions && isOwner && activeList && (
         <div className="lc-options">
           <button
@@ -228,42 +189,15 @@ export default function ListeCourse() {
       )}
 
       {/* ---- Partage ---- */}
-      {showShare && isOwner && activeList && (
-        <div className="lc-share-panel">
-          <p className="lc-share-title">Membres actuels</p>
-          {activeList.members.map(m => (
-            <div key={m.id} className="lc-member-row">
-              <span className="lc-member-name">
-                {m.username ?? 'Utilisateur'} {m.role === 'owner' ? '👑' : ''}
-              </span>
-              {m.role !== 'owner' && (
-                <button
-                  className="lc-member-remove"
-                  onClick={() => removeMember(activeList.id, m.userId)}
-                >Retirer</button>
-              )}
-            </div>
-          ))}
-
-          {friendsNotInList.length > 0 && (
-            <>
-              <p className="lc-share-title" style={{ marginTop: 12 }}>
-                Ajouter un ami
-              </p>
-              {friendsNotInList.map(f => (
-                <div key={f.id} className="lc-member-row">
-                  <span className="lc-member-name">
-                    {f.profile?.username ?? 'Ami'}
-                  </span>
-                  <button
-                    className="lc-member-add"
-                    onClick={() => handleAddMember(f.profile?.id ?? '')}
-                  >+ Ajouter</button>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
+      {showShare && activeList && (
+        <SharePanel
+            members={activeList.members}
+            friendsNotInList={friendsNotInList}
+            listId={activeList.id}
+            isOwner={isOwner}
+            onRemoveMember={removeMember}
+            onAddMember={handleAddMember}
+        />
       )}
 
       {/* ---- Input ajout tâche ---- */}
@@ -291,24 +225,13 @@ export default function ListeCourse() {
 
       {activeList && (
         <ul className="task-list" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-          {activeList.tasks.map(task => (
-            <li
-              key={task.id}
-              className={`lc-task-item ${task.done ? 'done' : ''}`}
-              onClick={() => toggleTask(task.id, task.done)}
-            >
-              <span className={`lc-task-check ${task.done ? 'checked' : ''}`}>
-                {task.done ? '✓' : ''}
-              </span>
-              <span className="task-text">{task.text}</span>
-              <button
-                className="lc-task-delete"
-                onClick={e => {
-                  e.stopPropagation()
-                  deleteTask(task.id)
-                }}
-              >✕</button>
-            </li>
+          {activeList.tasks.map((task: Task) => (
+            <TaskItem
+                key={task.id}
+                task={task}
+                onToggle={toggleTask}
+                onDelete={deleteTask}
+            />
           ))}
         </ul>
       )}

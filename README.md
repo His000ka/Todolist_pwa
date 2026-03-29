@@ -25,3 +25,59 @@ Pages:
 
 - Amis:
     - Update UX à la fin
+
+    ------- Ordonner le code --------
+
+    services, constantsn hook, component
+
+    --- ARCHITECTURE CIBLE A FAIRE PARTOUT 
+            ✔ service = data access
+            ✔ mapper = transformation
+            ✔ hook = orchestration
+            ✔ UI = propre
+
+
+    exemple:
+src/
+  services/
+    taskListService.ts        ← Supabase only (API layer)
+
+  mappers/
+    taskListMapper.ts         ← transformation data (null → UI safe)
+
+  hooks/
+    useTaskLists.ts           ← state + orchestration only
+
+    --- UNE FOIS ARCHITECTURE FAITE 
+
+        ✔ Domain types
+                → sans domain model :
+                        ❌ ton app devient couplée à Supabase
+                        ❌ impossible de changer backend
+                        ❌ refactor difficile
+                        ❌ bugs silencieux
+
+                → Avec domain model :
+                        ✔ ton app est indépendante du backend
+                        ✔ tu peux changer Supabase → Firebase → API
+                        ✔ logique stable
+                        ✔ code lisible
+
+        ✔ supprimer any
+
+            →Problème réel des any
+                tu perds l’autocomplétion
+                tu peux casser ton app sans erreur TS
+                tu ne sais plus ce que contient vraiment un objet
+                ton refactor devient dangereux
+
+        ✔ optimiser queries (IMPORTANT A FAIRE !)
+            → utile plus tard (scale / perf)
+                option 1 (simple)
+                    👉 juste optimiser reload partiel
+
+                option 2 (pro)
+                    👉 optimistic updates + patch local state
+
+                option 3 (senior)
+                    👉 realtime + state normalized (Redux-like)
