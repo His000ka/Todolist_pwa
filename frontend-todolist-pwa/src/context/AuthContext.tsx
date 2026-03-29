@@ -41,6 +41,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     await supabase.auth.signOut()
+    localStorage.removeItem("tasks_premium")
+    localStorage.removeItem("tasklists_cache")
+    localStorage.removeItem("plant")
+    localStorage.removeItem("garden_totalXP")
+    localStorage.removeItem("garden")
+    localStorage.removeItem("SimpleTaskLists_cache")
   }
 
   return (

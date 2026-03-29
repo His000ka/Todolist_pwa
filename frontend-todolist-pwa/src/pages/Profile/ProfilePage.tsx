@@ -183,14 +183,6 @@ export default function ProfilePage() {
             {inviteCode ?? '...'}
           </span>
         </div>
-        <div className="profile-sep" />
-        <div className="profile-row">
-          <span className="profile-row-label">Sync Supabase</span>
-          <div className="profile-badge profile-badge--connected profile-badge--sm">
-            <span className="profile-dot profile-dot--green" />
-            Actif
-          </div>
-        </div>
       </div>
 
       {/* Partage */}
@@ -198,10 +190,9 @@ export default function ProfilePage() {
         {copied ? 'Lien copié !' : 'Copier mon lien d\'invitation'}
       </button>
 
-      {/* Bouton déconnexion */}
-      <button className="profile-btn profile-btn--logout" onClick={signOut}>
+      {isOnline && <button className="profile-btn profile-btn--logout" onClick={signOut}>
         Se déconnecter
-      </button>
+      </button>}
 
     </div>
   );
