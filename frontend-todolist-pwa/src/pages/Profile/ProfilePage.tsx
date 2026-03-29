@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useNavigate } from 'react-router-dom'
 import "./ProfilePage.css";
+import { useOnlineStatus } from "../../hooks/useOnlineStatus";
 
 function getInitials(username: string | null, email: string | null): string {
-  const name = username ?? email ?? '?'
+  const name = username  ?? email ?? '?'
   return name.slice(0, 2).toUpperCase()
 }
 
@@ -26,6 +27,7 @@ export default function ProfilePage() {
   const [saveMsg,     setSaveMsg]     = useState<string | null>(null)
   const [inviteCode,  setInviteCode]  = useState<string | null>(null)
   const [copied,      setCopied]      = useState(false)
+  const isOnline = useOnlineStatus()
 
   useEffect(() => {
     if (!user) return
@@ -38,7 +40,7 @@ export default function ProfilePage() {
       .from('profiles')
       .select('username, invite_code')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
 
     if (data) {
       setUsername(data.username ?? '')
@@ -151,11 +153,17 @@ export default function ProfilePage() {
 
       <p className="profile-email">{user.email}</p>
 
-      <div className="profile-badge profile-badge--connected">
-        <span className="profile-dot profile-dot--green" />
-        Connecté
-      </div>
-
+        { isOnline ?
+            <div className="profile-badge profile-badge--connected">
+                <span className="profile-dot profile-dot--green" />
+                Connecté
+            </div>
+            : 
+            <div className="profile-badge profile-badge--disconnected">
+                <span className="profile-dot profile-dot--red" />
+                Déconnecté
+            </div>
+        }
       <div className="profile-card">
         <p className="profile-card-title">Thèmes</p>
         <ThemeSelector></ThemeSelector>

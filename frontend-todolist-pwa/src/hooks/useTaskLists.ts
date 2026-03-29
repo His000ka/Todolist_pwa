@@ -19,7 +19,14 @@ export function useTaskLists() {
 
   // ── Fetch Supabase → cache → state ──────────────────────────────
   const syncFromSupabase = useCallback(async () => {
-    if (!user || !isOnline) return
+    if (!user) return
+
+    if (!isOnline) {
+        // Offline → charge depuis le cache uniquement
+        const cached = taskListCache.get()
+        setLists(cached)
+        return
+    }
     setLoading(true)
 
     const { data: listsData } = await taskListService.fetchLists()
@@ -56,7 +63,7 @@ export function useTaskLists() {
   useEffect(() => {
     const cached = taskListCache.get()
     if (cached.length) setLists(cached)   // affichage immédiat
-    if (user) syncFromSupabase()
+    if (user && isOnline) syncFromSupabase()
   }, [user])
 
   // ── Reconnexion → resync ─────────────────────────────────────────

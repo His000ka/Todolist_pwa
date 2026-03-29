@@ -26,15 +26,11 @@ export default function AuthPage() {
         setError(null)
 
         if (isSignUp) {
-            const { data, error } = await supabase.auth.signUp({ email, password })
-            if (error) { setError(error.message); setLoading(false); return }
+            const { data, error } = await supabase.auth.signUp({ email, password, options: {data: { username: username.trim() || null }}})
+            if (error) {console.error('Signup error:', error.message); setError(error.message); setLoading(false); return }
 
             if (data.user) {
-            await supabase.from('profiles').upsert({
-                id:       data.user.id,
-                email:    email,
-                username: username.trim() || null,
-            })
+                console.log("eheh")
             }
             navigate('/profile')
         } else {
