@@ -138,6 +138,12 @@
   color: rgba(134, 239, 172, 0.9);
 }
 
+.profile-badge--disconnected {
+  background: rgba(197, 34, 34, 0.15);
+  border: 1px solid rgba(228, 47, 47, 0.3);
+  color: rgba(219, 26, 26, 0.9);
+}
+
 .profile-badge--local {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -157,6 +163,7 @@
 }
 
 .profile-dot--green { background: #4ade80; }
+.profile-dot--red { background: #de4a4a; }
 .profile-dot--gray  { background: rgba(255, 255, 255, 0.3); }
 
 /* ---- Card ---- */

@@ -331,7 +331,7 @@
   background: rgba(255, 255, 255, 0.05);
   margin-bottom: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -340,6 +340,10 @@
   text-decoration: line-through;
   color: rgba(255, 255, 255, 0.4);
   filter: none;
+}
+
+.lc-task-item.pending {
+  opacity: 0.6;
 }
 
 .lc-task-check {
