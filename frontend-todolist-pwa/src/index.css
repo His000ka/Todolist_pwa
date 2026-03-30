@@ -1,5 +1,6 @@
 :root {
   --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-android: rgba(255, 255, 255, 0.2);
   --glass-border: rgba(255, 255, 255, 0.3);
   --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
   --text-color: #1e293b;
@@ -203,6 +204,7 @@ body {
 @supports ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
   .glass {
     background: var(--glass-bg);
+    /* background: var(--sheet-bg); */
     backdrop-filter: blur(var(--blur-component));
     -webkit-backdrop-filter: blur(var(--blur-component));
     box-shadow: var(--glass-shadow);
@@ -211,11 +213,7 @@ body {
 
 @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
   .glass {
-    background: linear-gradient(
-      135deg,
-      rgba(255,255,255,0.14),
-      rgba(255,255,255,0.05)
-    );
+    background: var(--sheet-bg);
 
     box-shadow:
       0 10px 30px rgba(0,0,0,0.25),
