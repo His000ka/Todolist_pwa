@@ -6,7 +6,14 @@ type Props = {
   onDelete: (id: string) => void
 }
 
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString('fr-FR', {
+    day: 'numeric', month: 'short'
+  }) // "12 mars"
+}
+
 export default function TaskItem({ task, onToggle, onDelete }: Props) {
+  const isPending = task.id.startsWith('temp-')
   return (
     <li
       className={`lc-task-item ${task.done ? 'done' : ''} ${task.id.startsWith('temp-') ? 'pending' : ''}`}
@@ -18,7 +25,14 @@ export default function TaskItem({ task, onToggle, onDelete }: Props) {
       </span>
 
       {/* text */}
-      <span className="task-text">{task.text}</span>
+      <div className="lc-task-body">
+        <span className="task-text">{task.text}</span>
+        {!isPending && (
+          <span className="lc-task-meta">
+            {task.createdByUsername ?? 'Inconnu'} · {formatDate(task.createdAt)}
+          </span>
+        )}
+      </div>
 
       {/* delete */}
       <button

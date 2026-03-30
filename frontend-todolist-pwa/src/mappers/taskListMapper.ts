@@ -30,6 +30,7 @@ export function mapTaskLists(
         id: t.id,
         listId: t.list_id,
         createdBy: t.created_by,
+        createdByUsername: profileMap.get(t.created_by)?.username ?? null,
         text: t.text,
         done: t.done,
         createdAt: t.created_at,

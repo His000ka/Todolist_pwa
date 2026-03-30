@@ -127,8 +127,6 @@ export default function ListeCourse() {
       )}
 
       {/* ---- Liste des tâches ---- */}
-      {/* {loading && <p className="lc-empty">Chargement...</p>} */}
-
       {!loading && !activeList && lists.length === 0 && (
         <div className="lc-empty-state">
           <p className="lc-empty">Aucune liste — crée-en une !</p>
