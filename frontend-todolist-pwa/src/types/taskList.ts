@@ -9,6 +9,7 @@ export type SimpleTask = {
   id: string
   listId: string
   createdBy: string
+  createdByUsername?: string | null
   text: string
   done: boolean
   createdAt: string

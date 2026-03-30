@@ -46,7 +46,9 @@ export function useTaskLists() {
     ])
 
     const memberUserIds = membersRes.data?.map(m => m.user_id) ?? []
-    const profilesRes   = await taskListService.fetchProfiles(memberUserIds)
+    const taskCreatorIds = tasksRes.data?.map(t => t.created_by) ?? []
+    const allUserIds     = [...new Set([...memberUserIds, ...taskCreatorIds])] 
+    const profilesRes   = await taskListService.fetchProfiles(allUserIds)
 
     const mapped = mapTaskLists(
       listsData          ?? [],
