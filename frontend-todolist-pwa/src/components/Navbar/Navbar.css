@@ -11,7 +11,7 @@
   align-items: center;
 
   padding: 14px 16px;
-  padding-bottom: calc(14px + env(safe-area-inset-bottom)); /* iPhone notch */
+  /* padding-bottom: calc(14px + env(safe-area-inset-bottom)); */
 
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(15px);
