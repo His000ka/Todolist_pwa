@@ -1,24 +1,27 @@
 .bottom-navbar {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
   
   /* Padding adaptatif pour l'iPhone */
-  padding: 10px 20px calc(5px + env(safe-area-inset-bottom)) 20px;
+  /* padding: 10px 20px calc(5px + env(safe-area-inset-bottom)) 20px; */
+
+  padding: 14px;
   
   /* Effet Glassmorphism */
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(20px);
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  /* border: 1px solid rgba(255, 255, 255, 0.2); */ 
-  border-top: 1px solid rgba(255, 255, 255, 0.6);
-  
+  /* border-top-left-radius: 20px;
+  border-top-right-radius: 20px; */
+  /* border-top: 1px solid rgba(255, 255, 255, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6); */
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.5); 
   z-index: 1000;
   box-sizing: border-box;
 
