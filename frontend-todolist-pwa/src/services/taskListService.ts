@@ -52,13 +52,13 @@ export const taskListService = {
       .eq("user_id", userId)
   },
 
-  addTask(listId: string, userId: string, text: string) {
-    return supabase.from("simple_tasks").insert({
-      list_id: listId,
-      created_by: userId,
-      text,
-    })
-  },
+    addTask(listId: string, userId: string, text: string) {
+    return supabase
+        .from('simple_tasks')
+        .insert({ list_id: listId, created_by: userId, text })
+        .select()
+        .single()  // ← retourne la row avec le vrai id
+    },
 
   toggleTask(taskId: string, done: boolean) {
     return supabase.from("simple_tasks").update({ done: !done }).eq("id", taskId)

@@ -9,7 +9,7 @@ type Props = {
 export default function TaskItem({ task, onToggle, onDelete }: Props) {
   return (
     <li
-      className={`lc-task-item ${task.done ? "done" : ""}`}
+      className={`lc-task-item ${task.done ? 'done' : ''} ${task.id.startsWith('temp-') ? 'pending' : ''}`}
       onClick={() => onToggle(task.id, task.done)}
     >
       {/* checkbox */}

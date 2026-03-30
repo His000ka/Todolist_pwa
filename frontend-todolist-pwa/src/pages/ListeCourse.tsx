@@ -33,8 +33,9 @@ export default function ListeCourse() {
 
   const handleAddTask = async () => {
     if (!input.trim() || !activeListId) return
-    await addTask(activeListId, input.trim())
+    const task = input.trim()
     setInput('')
+    await addTask(activeListId, task)
     inputRef.current?.focus()
   }
 
@@ -126,7 +127,7 @@ export default function ListeCourse() {
       )}
 
       {/* ---- Liste des tâches ---- */}
-      {loading && <p className="lc-empty">Chargement...</p>}
+      {/* {loading && <p className="lc-empty">Chargement...</p>} */}
 
       {!loading && !activeList && lists.length === 0 && (
         <div className="lc-empty-state">
