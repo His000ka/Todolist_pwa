@@ -1,12 +1,12 @@
 :root {
-  --glass-bg: rgba(255, 255, 255, 0.15);
+  --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.3);
   --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
   --text-color: #1e293b;
   --accent-color: #6366f1;
 
-  --blur-component: 20px
-  --weather-overlay: rgba(255, 200, 80, 0.06)
+  --blur-component: 12px;
+  --weather-overlay: rgba(255, 200, 80, 0.06);
 }
 
 
@@ -191,4 +191,50 @@ body {
   box-sizing: border-box;
   padding: 24px 20px calc(60px + env(safe-area-inset-bottom)) 20px;
   color: white;
+}
+
+.glass {
+  position: relative;
+  border-radius: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@supports ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-component));
+    -webkit-backdrop-filter: blur(var(--blur-component));
+    box-shadow: var(--glass-shadow);
+  }
+}
+
+@supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+  .glass {
+    background: linear-gradient(
+      135deg,
+      rgba(255,255,255,0.14),
+      rgba(255,255,255,0.05)
+    );
+
+    box-shadow:
+      0 10px 30px rgba(0,0,0,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.25);
+  }
+}
+
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+
+  opacity: 0.025;
+
+  background-image:
+    radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,0.15) 1px, transparent 1px);
+
+  background-size: 4px 4px;
 }

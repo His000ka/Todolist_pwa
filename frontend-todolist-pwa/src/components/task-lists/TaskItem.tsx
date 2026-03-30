@@ -16,7 +16,7 @@ export default function TaskItem({ task, onToggle, onDelete }: Props) {
   const isPending = task.id.startsWith('temp-')
   return (
     <li
-      className={`lc-task-item ${task.done ? 'done' : ''} ${task.id.startsWith('temp-') ? 'pending' : ''}`}
+      className={`lc-task-item glass ${task.done ? 'done' : ''} ${task.id.startsWith('temp-') ? 'pending' : ''}`}
       onClick={() => onToggle(task.id, task.done)}
     >
       {/* checkbox */}
