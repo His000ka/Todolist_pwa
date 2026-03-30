@@ -27,7 +27,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 14px;
+  padding: 10px 14px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.05);
@@ -41,7 +41,7 @@
 
 .lc-list-pill.active {
   background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.25);
+  border: 1px solid var(--glass-border);
   color: rgba(255, 255, 255, 0.9);
 }
 
@@ -353,7 +353,7 @@
 .lc-task-delete {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.2);
+  color: rgb(181, 0, 0);
   font-size: 12px;
   cursor: pointer;
   padding: 4px;
