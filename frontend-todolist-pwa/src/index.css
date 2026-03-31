@@ -10,6 +10,27 @@
   --weather-overlay: rgba(255, 200, 80, 0.06);
 }
 
+/*
+  Mode classes set by JS (see supportsBackdropFilter + useBackdropFilterClass)
+  - html.glass    => glassmorphism enabled
+  - html.no-glass => clean fallback (no blur)
+*/
+
+html.glass {
+  --surface-bg: var(--glass-bg);
+  --surface-border: var(--glass-border);
+  --surface-shadow: var(--glass-shadow);
+}
+
+html.no-glass {
+  /* More opaque surfaces improve contrast without blur */
+  --surface-bg: var(--sheet-bg);
+  --surface-border: rgba(255, 255, 255, 0.18);
+  --surface-shadow:
+    0 10px 30px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.18);
+}
+
 
 /* Thème Sunset par défaut */
 .theme-sunset {
@@ -190,38 +211,25 @@ body {
   max-width: 400px;
   margin: 0 auto;
   box-sizing: border-box;
-  padding: 24px 20px calc(60px + env(safe-area-inset-bottom)) 20px;
+  padding: 24px 20px calc(60px + env(safe-area-inset-bottom, 0px)) 20px;
   color: white;
 }
 
-.glass {
+.glass-panel {
   position: relative;
   border-radius: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.6);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--surface-border);
+  background: var(--surface-bg);
+  box-shadow: var(--surface-shadow);
 }
 
-@supports ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
-  .glass {
-    background: var(--glass-bg);
-    /* background: var(--sheet-bg); */
-    backdrop-filter: blur(var(--blur-component));
-    -webkit-backdrop-filter: blur(var(--blur-component));
-    box-shadow: var(--glass-shadow);
-  }
+/* Only enable blur when we explicitly detected support */
+html.glass .glass-panel {
+  backdrop-filter: blur(var(--blur-component));
+  -webkit-backdrop-filter: blur(var(--blur-component));
 }
 
-@supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
-  .glass {
-    background: var(--sheet-bg);
-
-    box-shadow:
-      0 10px 30px rgba(0,0,0,0.25),
-      inset 0 1px 0 rgba(255,255,255,0.25);
-  }
-}
-
-.glass::after {
+.glass-panel::after {
   content: "";
   position: absolute;
   inset: 0;

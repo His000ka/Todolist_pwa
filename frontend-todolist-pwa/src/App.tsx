@@ -10,8 +10,11 @@ import AuthPage from './pages/Auth/AuthPage';
 import ProfilePage from './pages/Profile/ProfilePage';
 import FriendsPage from './pages/Friends/FriendsPage'
 import FriendProfilePage from './pages/Friends/FriendProfilePage';
+import { useBackdropFilterClass } from './hooks/useBackdropFilterClass';
 
 export default function App() {
+  useBackdropFilterClass({ target: 'html' });
+
   return (
     <ThemeProvider>
       <AuthProvider>

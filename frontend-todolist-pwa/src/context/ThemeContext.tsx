@@ -24,7 +24,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     localStorage.setItem("app_theme", theme);
     const current = themes[theme];
-    document.documentElement.className = current.class;
+    const root = document.documentElement;
+    for (const t of Object.values(themes)) {
+      root.classList.remove(t.class);
+    }
+    root.classList.add(current.class);
     
     // Fix pour la barre de statut iPhone
     const meta = document.querySelector("meta[name='theme-color']");
