@@ -1,3 +1,4 @@
+import { useState } from "react"
 import type { TaskListMember } from "../../types/taskList"
 
 type Friend = {
@@ -11,25 +12,43 @@ type Friend = {
 type Props = {
   members: TaskListMember[]
   friendsNotInList: Friend[]
+  hasFriends: boolean
   listId: string
   isOwner: boolean
 
-  onRemoveMember: (listId: string, userId: string) => void
-  onAddMember: (friendId: string) => void
+  onRemoveMember: (listId: string, userId: string) => void | Promise<void>
+  onAddMember: (friendId: string) => void | Promise<void>
 }
 
 export default function SharePanel({
   members,
   friendsNotInList,
+  hasFriends,
   listId,
   isOwner,
   onRemoveMember,
   onAddMember,
 }: Props) {
+  const [pendingIds, setPendingIds] = useState<Set<string>>(new Set())
+
   if (!isOwner) return null
 
+  const withPending = async (id: string, action: () => void | Promise<void>) => {
+    if (pendingIds.has(id)) return
+    setPendingIds(prev => new Set(prev).add(id))
+    try {
+      await action()
+    } finally {
+      setPendingIds(prev => {
+        const next = new Set(prev)
+        next.delete(id)
+        return next
+      })
+    }
+  }
+
   return (
-    <div className="lc-share-panel">
+    <div className="lc-share-panel glass-panel">
       {/* MEMBERS */}
       <p className="lc-share-title">Membres actuels</p>
 
@@ -43,7 +62,8 @@ export default function SharePanel({
           {m.role !== "owner" && (
             <button
               className="lc-member-remove"
-              onClick={() => onRemoveMember(listId, m.userId)}
+              disabled={pendingIds.has(m.userId)}
+              onClick={() => withPending(m.userId, () => onRemoveMember(listId, m.userId))}
             >
               Retirer
             </button>
@@ -52,7 +72,7 @@ export default function SharePanel({
       ))}
 
       {/* FRIENDS */}
-      {friendsNotInList.length > 0 && (
+      {friendsNotInList.length > 0 ? (
         <>
           <p className="lc-share-title" style={{ marginTop: 12 }}>
             Ajouter un ami
@@ -66,13 +86,18 @@ export default function SharePanel({
 
               <button
                 className="lc-member-add"
-                onClick={() => onAddMember(f.profile?.id ?? "")}
+                disabled={pendingIds.has(f.id)}
+                onClick={() => withPending(f.id, () => onAddMember(f.profile?.id ?? ""))}
               >
                 + Ajouter
               </button>
             </div>
           ))}
         </>
+      ) : (
+        <p className="lc-share-empty">
+          {hasFriends ? "Tous tes amis ont déjà accès" : "Ajoute des amis pour partager"}
+        </p>
       )}
     </div>
   )

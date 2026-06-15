@@ -217,7 +217,7 @@ const checkAndReset = useCallback(() => {
   }, [deleteRemote])
 
   const completeTask = useCallback((id: string) => {
-    const sideEffect: { current: (() => void) | null } = { current: null }
+    let sideEffect: () => void = () => {}
 
     setTasks(prev => {
         const task = prev.find(t => t.id === id)
@@ -273,7 +273,7 @@ const checkAndReset = useCallback(() => {
         return prev.map(t => t.id === id ? updated : t)
     })
 
-    sideEffect?.()
+    sideEffect()
   }, [upsertWithQueue, deleteRemote, addXP])
 
   const editDesc = useCallback((id: string, description: string) => {

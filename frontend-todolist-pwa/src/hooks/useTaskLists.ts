@@ -15,6 +15,12 @@ export function useTaskLists() {
   const [lists,        setLists]        = useState<SimpleTaskList[]>(taskListCache.get)
   const [activeListId, setActiveListId] = useState<string | undefined>()
   const [loading,      setLoading]      = useState(false)
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
+
+  const showToast = (message: string) => {
+    setToastMessage(message)
+    setTimeout(() => setToastMessage(null), 3000)
+  }
 
   const activeList = lists.find(l => l.id === activeListId) ?? null
 
@@ -80,7 +86,7 @@ export function useTaskLists() {
   // ── Helpers mutations (online only) ─────────────────────────────
   const guardOnline = () => {
     if (!isOnline) {
-      alert('Pas de connexion — modifications impossibles hors ligne.')
+      showToast('Pas de connexion — modifications impossibles hors ligne.')
       return false
     }
     return true
@@ -133,6 +139,7 @@ export function useTaskLists() {
         tasks: [...l.tasks, {
             id: tempId, listId,
             createdBy: user.id, text,
+            createdByUsername: l.members.find(m => m.userId === user.id)?.username,
             done: false,
             createdAt: new Date().toISOString()
         }],
@@ -189,18 +196,28 @@ export function useTaskLists() {
     }
   const addMember = async (listId: string, friendId: string) => {
     if (!guardOnline()) return
-    await taskListService.addMember(listId, friendId)
-    await syncFromSupabase()
+    try {
+      const { error } = await taskListService.addMember(listId, friendId)
+      if (error) throw error
+      await syncFromSupabase()
+    } catch {
+      showToast("Impossible d'ajouter ce membre — réessaie plus tard.")
+    }
   }
 
   const removeMember = async (listId: string, userId: string) => {
     if (!guardOnline()) return
-    await taskListService.removeMember(listId, userId)
-    await syncFromSupabase()
+    try {
+      const { error } = await taskListService.removeMember(listId, userId)
+      if (error) throw error
+      await syncFromSupabase()
+    } catch {
+      showToast("Impossible de retirer ce membre — réessaie plus tard.")
+    }
   }
 
   return {
-    lists, activeList, activeListId, loading, isOnline,
+    lists, activeList, activeListId, loading, isOnline, toastMessage,
     setActiveListId,
     createList, deleteList,
     addMember, removeMember,

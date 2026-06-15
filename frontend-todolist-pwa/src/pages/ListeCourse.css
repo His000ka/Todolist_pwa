@@ -4,6 +4,11 @@
   gap: 14px;
 }
 
+@keyframes lc-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ---- Sélecteur de listes ---- */
 .lc-lists-row {
   display: flex;
@@ -29,20 +34,24 @@
   gap: 6px;
   padding: 10px 14px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
   color: rgba(255, 255, 255, 0.5);
   font-size: 13px;
   white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s ease;
   -webkit-tap-highlight-color: transparent;
+  animation: lc-fade-in 0.25s ease;
 }
 
 .lc-list-pill.active {
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid var(--glass-border);
   color: rgba(255, 255, 255, 0.9);
+}
+
+.lc-list-pill.lc-exit {
+  opacity: 0;
+  transform: scale(0.85);
 }
 
 .lc-new-list-btn {
@@ -66,11 +75,6 @@
 
 /* ---- Nouvelle liste form ---- */
 .lc-new-list-form {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
   padding: 14px;
   display: flex;
   flex-direction: column;
@@ -203,10 +207,6 @@
 
 /* ---- Options ---- */
 .lc-options {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 8px;
 }
@@ -233,11 +233,6 @@
 
 /* ---- Partage ---- */
 .lc-share-panel {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
   padding: 14px;
   display: flex;
   flex-direction: column;
@@ -250,6 +245,12 @@
   text-transform: uppercase;
   letter-spacing: 0.07em;
   margin: 0;
+}
+
+.lc-share-empty {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 4px 0 0;
 }
 
 .lc-member-row {
@@ -283,6 +284,12 @@
   cursor: pointer;
 }
 
+.lc-member-remove:disabled,
+.lc-member-add:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 /* ---- Tâches ---- */
 .lc-task-item {
   display: flex;
@@ -298,6 +305,12 @@
   cursor: pointer;
   transition: opacity 0.2s ease, transform 0.2s ease;
   -webkit-tap-highlight-color: transparent;
+  animation: lc-fade-in 0.25s ease;
+}
+
+.lc-task-item.lc-exit {
+  opacity: 0;
+  transform: translateX(-16px);
 }
 
 .lc-task-item.done { opacity: 0.45; }
@@ -331,6 +344,21 @@
   display: none; /* pas de meta sur les tasks temporaires */
 }
 
+.lc-meta-skeleton {
+  display: inline-block;
+  width: 48px;
+  height: 10px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  animation: lc-pulse 1s ease-in-out infinite;
+  vertical-align: middle;
+}
+
+@keyframes lc-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
 .lc-task-check {
   width: 22px;
   height: 22px;
@@ -353,12 +381,44 @@
 .lc-task-delete {
   background: none;
   border: none;
-  color: rgb(181, 0, 0);
+  color: rgba(252, 165, 165, 0.7);
   font-size: 12px;
   cursor: pointer;
   padding: 4px;
   flex-shrink: 0;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* ---- Chargement ---- */
+.lc-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 2px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.lc-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-top-color: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: lc-spin 0.7s linear infinite;
+}
+
+@keyframes lc-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- Toast / bandeau ---- */
+.lc-toast {
+  padding: 10px 14px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
 }
 
 /* ---- Empty states ---- */
