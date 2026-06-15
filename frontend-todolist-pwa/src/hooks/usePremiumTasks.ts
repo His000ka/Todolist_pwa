@@ -217,19 +217,23 @@ const checkAndReset = useCallback(() => {
   }, [deleteRemote])
 
   const completeTask = useCallback((id: string) => {
+    const sideEffect: { current: (() => void) | null } = { current: null }
+
     setTasks(prev => {
         const task = prev.find(t => t.id === id)
         if (!task) return prev
 
         if (isTaskLocked(task)) return prev
-        
+
         const now = Date.now()
         const xp = calculateXP(task)
         let updated: TaskPremium
 
         if (task.type === 'one') {
-            if (addXP) addXP(xp)
-            deleteRemote(task.id)
+            sideEffect = () => {
+                if (addXP) addXP(xp)
+                deleteRemote(task.id)
+            }
             return prev.filter(t => t.id !== id)
         }
         else if (task.type === 'daily') {
@@ -244,7 +248,10 @@ const checkAndReset = useCallback(() => {
                 lastCompleted: now,
                 streak:        (task.streak ?? 0) + 1,
             }
-            if (addXP) addXP(xp, hasStreakBonus)
+            sideEffect = () => {
+                if (addXP) addXP(xp, hasStreakBonus)
+                upsertWithQueue(updated)
+            }
         }
 
         else {
@@ -257,13 +264,17 @@ const checkAndReset = useCallback(() => {
             progress:      newProgress,
             lastCompleted: now,
         }
-        if (addXP) addXP(xp)
+        sideEffect = () => {
+            if (addXP) addXP(xp)
+            upsertWithQueue(updated)
+        }
         }
 
-        upsertWithQueue(updated)
         return prev.map(t => t.id === id ? updated : t)
     })
-  }, [upsertWithQueue, addXP])
+
+    sideEffect?.()
+  }, [upsertWithQueue, deleteRemote, addXP])
 
   const editDesc = useCallback((id: string, description: string) => {
     setTasks(prev => {

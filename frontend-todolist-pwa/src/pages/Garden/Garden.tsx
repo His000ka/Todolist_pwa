@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 // import { useGame } from "../../game/useGame";
 import { useGarden } from '../../hooks/useGarden'
+import { usePremiumTasks } from '../../hooks/usePremiumTasks'
+import { getMaxDailyStreak, getTasksDoneCount } from '../../utils/taskUtils'
 import { XP_PER_LEVEL } from "../../game/constants";
 import PlantSVG from "./components/PlantSVG";
 import XPBar from "./components/XPBar";
@@ -46,7 +48,8 @@ function StarsOverlay() {
 }
 
 export default function Garden() {
-  const { garden, totalXP, addXP, setWeather } = useGarden()
+  const { garden, totalXP, setWeather } = useGarden()
+  const { tasks } = usePremiumTasks()
 
   // Met à jour le fond selon la météo
     useEffect(() => {
@@ -64,8 +67,8 @@ export default function Garden() {
         );
     }, [garden.weather]);
 
-  // Stats factices pour le streak — sera branché sur usePremiumTasks en Phase 3
-  const streak = 7;
+  const streak    = getMaxDailyStreak(tasks)
+  const tasksDone = getTasksDoneCount(tasks)
 
   return (
     <div className="garden-page">
@@ -105,21 +108,9 @@ export default function Garden() {
           level={garden.level}
           totalXP={totalXP}
           streak={streak}
-          tasksDone={0}
+          tasksDone={tasksDone}
           xpPerLevel={XP_PER_LEVEL}
         />
-
-        {/* Boutons test — sera retiré quand branché sur la todolist */}
-        <div className="garden-actions">
-          <button className="garden-btn garden-btn--task"
-            onClick={() => addXP(15)}>
-            + Tâche <span>15 xp</span>
-          </button>
-          <button className="garden-btn garden-btn--daily"
-            onClick={() => addXP(40, true)}>
-            + Daily <span>40 xp</span>
-          </button>
-        </div>
 
       </div>
     </div>

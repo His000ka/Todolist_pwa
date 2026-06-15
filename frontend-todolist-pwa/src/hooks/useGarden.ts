@@ -85,7 +85,7 @@ export function useGarden() {
             last_seen: garden.lastSeen,
         })
     }
-    loadingRef.current = true
+    loadingRef.current = false // ??
   }
 
   const upsertWithQueue = useCallback(async (g: Garden, xp: number) => {

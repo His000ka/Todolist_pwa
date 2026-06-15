@@ -164,8 +164,6 @@ export function useFriends() {
         .eq('user_id', profile.id)
         .maybeSingle()
 
-        console.log('gardens:', garden)
-
     return {
         id:         profile.id,
         username:   profile.username,
@@ -177,53 +175,6 @@ export function useFriends() {
     }
     }, [user])
 
-//   const searchUser = useCallback(async (query: string): Promise<FriendProfile | null> => {
-//     if (!user || !query.trim()) return null
-
-//     const { data } = await supabase
-//       .from('profiles')
-//       .select('id, username, avatar_url, invite_code')
-//       .or(`username.ilike.%${query}%,invite_code.eq.${query}`)
-//       .neq('id', user.id)
-//       .limit(5)
-
-//     if (!data || data.length === 0) {
-//       const { data: userData } = await supabase
-//         .from('profiles')
-//         .select('id, username, avatar_url, invite_code')
-//         .eq('email', query)
-//         .neq('id', user.id)
-//         .single()
-
-//       if (!userData) return null
-//       return {
-//         id:         userData.id,
-//         username:   userData.username,
-//         email:      query,
-//         avatarUrl:  userData.avatar_url,
-//         level:      1,
-//         totalXP:    0,
-//         inviteCode: userData.invite_code,
-//       }
-//     }
-
-//     const profile = data[0]
-//     const { data: garden } = await supabase
-//       .from('garden')
-//       .select('level, total_xp')
-//       .eq('user_id', profile.id)
-//       .single()
-
-//     return {
-//       id:         profile.id,
-//       username:   profile.username,
-//       email:      null,
-//       avatarUrl:  profile.avatar_url,
-//       level:      garden?.level ?? 1,
-//       totalXP:    garden?.total_xp ?? 0,
-//       inviteCode: profile.invite_code,
-//     }
-//   }, [user])
 
   const sendRequest = useCallback(async (receiverId: string): Promise<boolean> => {
     if (!user) return false
