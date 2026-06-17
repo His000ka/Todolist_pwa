@@ -9,6 +9,7 @@ import ListSelector from '../components/task-lists/ListSelector'
 import TaskItem from "../components/task-lists/TaskItem"
 import SharePanel from "../components/task-lists/SharePanel"
 import CreateList from "../components/task-lists/CreateList"
+import ConfirmDialog from '../components/ConfirmDialog/ConfirmDialog'
 
 import './ListeCourse.css'
 import type { SimpleTask, TaskListMember } from '../types/taskList'
@@ -18,7 +19,7 @@ import type { SimpleTask, TaskListMember } from '../types/taskList'
 export default function ListeCourse() {
   const { user }    = useAuth()
   const {
-    lists, activeList, activeListId, loading, isOnline,
+    lists, activeList, activeListId, loading, isOnline, toastMessage,
     setActiveListId, createList, deleteList,
     addMember, removeMember,
     addTask, toggleTask, deleteTask,
@@ -29,7 +30,16 @@ export default function ListeCourse() {
   const [showNewList,  setShowNewList]  = useState(false)
   const [showShare,    setShowShare]    = useState(false)
   const [showOptions,  setShowOptions]  = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState<
+    | { type: 'list' }
+    | { type: 'task'; id: string }
+    | null
+  >(null)
+  const [removingTaskIds, setRemovingTaskIds] = useState<Set<string>>(new Set())
+  const [removingListIds, setRemovingListIds] = useState<Set<string>>(new Set())
   const inputRef = useRef<HTMLInputElement>(null)
+
+  const EXIT_DURATION = 220 // ms — doit correspondre à la transition .lc-exit
 
   const handleAddTask = async () => {
     if (!input.trim() || !activeListId) return
@@ -49,6 +59,36 @@ export default function ListeCourse() {
     await addMember(activeListId, friendId)
   }
 
+  const handleConfirmDelete = () => {
+    if (!confirmDelete) return
+
+    if (confirmDelete.type === 'list' && activeList) {
+      const id = activeList.id
+      setRemovingListIds(prev => new Set(prev).add(id))
+      setTimeout(() => {
+        deleteList(id)
+        setRemovingListIds(prev => {
+          const next = new Set(prev)
+          next.delete(id)
+          return next
+        })
+      }, EXIT_DURATION)
+    } else if (confirmDelete.type === 'task') {
+      const id = confirmDelete.id
+      setRemovingTaskIds(prev => new Set(prev).add(id))
+      setTimeout(() => {
+        deleteTask(id)
+        setRemovingTaskIds(prev => {
+          const next = new Set(prev)
+          next.delete(id)
+          return next
+        })
+      }, EXIT_DURATION)
+    }
+
+    setConfirmDelete(null)
+  }
+
   const isOwner = activeList?.ownerId === user?.id
 
   // Amis pas encore membres de la liste active
@@ -59,10 +99,24 @@ export default function ListeCourse() {
   return (
     <div className="lc-page">
 
+      {/* ---- Bandeau de notification (hors ligne, erreurs...) ---- */}
+      {toastMessage && (
+        <div className="lc-toast glass-panel">{toastMessage}</div>
+      )}
+
+      {/* ---- Chargement ---- */}
+      {loading && (
+        <div className="lc-loading">
+          <span className="lc-spinner" />
+          {lists.length === 0 ? 'Chargement des listes...' : 'Synchronisation...'}
+        </div>
+      )}
+
       {/* ---- Sélecteur de listes ---- */}
       <ListSelector
         lists={lists}
         activeListId={activeListId}
+        removingIds={removingListIds}
         onSelect={setActiveListId}
         onCreateClick={() => setShowNewList(true)}
       />
@@ -87,11 +141,11 @@ export default function ListeCourse() {
 
       {/* ---- Options liste - les '...' pour suprimer la liste ---- */}
       {showOptions && isOwner && activeList && (
-        <div className="lc-options">
+        <div className="lc-options glass-panel">
           <button
             className="lc-option-btn lc-option-btn--danger"
             onClick={() => {
-              deleteList(activeList.id)
+              setConfirmDelete({ type: 'list' })
               setShowOptions(false)
             }}
           >
@@ -105,6 +159,7 @@ export default function ListeCourse() {
         <SharePanel
             members={activeList.members}
             friendsNotInList={friendsNotInList}
+            hasFriends={friends.length > 0}
             listId={activeList.id}
             isOwner={isOwner}
             onRemoveMember={removeMember}
@@ -140,7 +195,8 @@ export default function ListeCourse() {
                 key={task.id}
                 task={task}
                 onToggle={toggleTask}
-                onDelete={deleteTask}
+                onDelete={(id) => setConfirmDelete({ type: 'task', id })}
+                className={removingTaskIds.has(task.id) ? 'lc-exit' : ''}
             />
           ))}
         </ul>
@@ -149,6 +205,21 @@ export default function ListeCourse() {
       {activeList && activeList.tasks.length === 0 && (
         <p className="lc-empty">Aucune tâche dans cette liste</p>
       )}
+
+      {/* ---- Confirmation de suppression ---- */}
+      <ConfirmDialog
+        open={confirmDelete !== null}
+        title={confirmDelete?.type === 'list' ? 'Supprimer la liste ?' : 'Supprimer la tâche ?'}
+        message={
+          confirmDelete?.type === 'list'
+            ? activeList && activeList.members.length > 1
+              ? `"${activeList.name}" sera définitivement supprimée pour vous et les ${activeList.members.length - 1} autre(s) membre(s).`
+              : `La liste "${activeList?.name}" sera définitivement supprimée.`
+            : 'Cette tâche sera définitivement supprimée.'
+        }
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setConfirmDelete(null)}
+      />
 
     </div>
   )

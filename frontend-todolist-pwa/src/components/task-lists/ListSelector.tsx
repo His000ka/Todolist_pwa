@@ -7,6 +7,7 @@ type List = {
 type Props = {
   lists: List[]
   activeListId?: string
+  removingIds?: Set<string>
   onSelect: (id: string) => void
   onCreateClick: () => void
 }
@@ -14,6 +15,7 @@ type Props = {
 export default function ListSelector({
   lists,
   activeListId,
+  removingIds,
   onSelect,
   onCreateClick,
 }: Props) {
@@ -23,7 +25,7 @@ export default function ListSelector({
         {lists.map((l) => (
           <button
             key={l.id}
-            className={`lc-list-pill ${l.id === activeListId ? "active" : ""}`}
+            className={`lc-list-pill glass-panel ${l.id === activeListId ? "active" : ""} ${removingIds?.has(l.id) ? "lc-exit" : ""}`}
             onClick={() => onSelect(l.id)}
           >
             <span>{l.emoji}</span>

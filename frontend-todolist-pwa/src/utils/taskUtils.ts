@@ -119,6 +119,18 @@ export function isTaskLocked(task: TaskPremium): boolean {
   return false
 }
 
+// ---- Agrégats pour le Garden ----
+
+export function getTasksDoneCount(tasks: TaskPremium[]): number {
+  return tasks.filter(t => t.done).length
+}
+
+export function getMaxDailyStreak(tasks: TaskPremium[]): number {
+  return tasks
+    .filter(t => t.type === 'daily')
+    .reduce((max, t) => Math.max(max, t.streak ?? 0), 0)
+}
+
 // Texte du bouton selon l'état
 export function getCompleteButtonLabel(task: TaskPremium): string {
   if (task.type === 'one') {

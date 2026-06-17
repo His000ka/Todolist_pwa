@@ -29,7 +29,7 @@ export default function AuthPage() {
             const { data, error } = await supabase.auth.signUp({ email, password, options: {data: { username: username.trim() || null }}})
             if (error) {console.error('Signup error:', error.message); setError(error.message); setLoading(false); return }
 
-            if (data.user) {
+            if (data.user) { //gerer l'erreur alors ?
                 console.log("eheh")
             }
             navigate('/profile')

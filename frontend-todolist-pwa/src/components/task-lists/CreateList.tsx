@@ -19,7 +19,7 @@ export default function CreateList({ onCreate, onClose }: Props) {
   }
 
   return (
-    <div className="lc-new-list-form">
+    <div className="lc-new-list-form glass-panel">
 
       {/* EMOJIS */}
       <div className="lc-emoji-picker">
